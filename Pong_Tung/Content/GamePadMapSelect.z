@@ -1,0 +1,151 @@
+class GamePadMapSelect : ZilchComponent
+{
+    //Controller ID
+    [Property]
+    var PlayerIndex : Integer = 0;
+    [Property]
+    var PlayerIndex2 : Integer = 1;
+    // The gamepad that our player is using
+    var Controller:Gamepad = null;
+    var Controller2:Gamepad = null;
+    var ControllerReset : Boolean = false;
+    var Controller2Reset : Boolean = false;
+    var GamePadUp : Boolean = false;
+    var GamePadDown : Boolean = false;
+    var GamePadUp2 : Boolean = false;
+    var GamePadDown2 : Boolean = false;
+    
+    [Property]
+    var TheLevel : Level = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        this.Controller = Zero.Gamepads.GetGamePad(this.PlayerIndex);
+        this.Controller2 = Zero.Gamepads.GetGamePad(this.PlayerIndex2);
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        
+        //Controllers
+        if(this.Controller.IsActive)
+        {
+            //S
+            if((this.Controller.LeftStick.Y < 0 && this.Controller.LeftStick.X > -0.4 && this.Controller.LeftStick.X < 0.4) || this.Controller.IsButtonPressed(Buttons.DpadDownFiltered))
+            {
+                if(this.ControllerReset == false)
+                {
+                    this.GamePadDown = true;
+                    this.ControllerReset = true;
+                }
+            }
+            else
+            {
+                this.GamePadDown = false;
+            }
+            
+            //W
+            if((this.Controller.LeftStick.Y > 0 && this.Controller.LeftStick.X > -0.4 && this.Controller.LeftStick.X < 0.4) || this.Controller.IsButtonPressed(Buttons.DpadUpFiltered))
+            {
+                if(this.ControllerReset == false)
+                {
+                    this.GamePadUp = true;
+                    this.ControllerReset = true;
+                }
+            }
+            else
+            {
+                this.GamePadUp = false;
+            }
+            
+            if(this.Controller.LeftStick.X == 0 && this.Controller.LeftStick.Y == 0)
+            {
+                this.ControllerReset = false;
+            }
+            
+            if(this.Controller.IsButtonPressed(Buttons.Start))
+            {
+                this.Space.LoadLevel(this.TheLevel);
+            }
+        }
+        
+        //Controllers
+        if(this.Controller2.IsActive)
+        {
+            //S
+            if((this.Controller2.LeftStick.Y < 0 && this.Controller2.LeftStick.X > -0.4 && this.Controller2.LeftStick.X < 0.4) || this.Controller2.IsButtonPressed(Buttons.DpadDownFiltered))
+            {
+                if(this.Controller2Reset == false)
+                {
+                    this.GamePadDown2 = true;
+                    this.Controller2Reset = true;
+                }
+            }
+            else
+            {
+                this.GamePadDown2 = false;
+            }
+            
+            //W
+            if((this.Controller2.LeftStick.Y > 0 && this.Controller2.LeftStick.X > -0.4 && this.Controller2.LeftStick.X < 0.4) || this.Controller2.IsButtonPressed(Buttons.DpadUpFiltered))
+            {
+                if(this.Controller2Reset == false)
+                {
+                    this.GamePadUp2 = true;
+                    this.Controller2Reset = true;
+                }
+            }
+            else
+            {
+                this.GamePadUp2 = false;
+            }
+            
+            if(this.Controller2.LeftStick.X == 0 && this.Controller2.LeftStick.Y == 0)
+            {
+                this.Controller2Reset = false;
+            }
+            
+            if(this.Controller2.IsButtonPressed(Buttons.Start))
+            {
+                this.Space.LoadLevel(this.TheLevel);
+            }
+        }
+        
+        //Loops back to button one
+        if(this.Space.Global.MapIDNum > 3)
+        {
+            this.Space.Global.MapIDNum = 1;
+        }
+        
+        //Loops back to max number
+        if(this.Space.Global.MapIDNum <= 0)
+        {
+            this.Space.Global.MapIDNum = 3;
+        }
+        
+        //Select Down
+        if(this.GamePadDown == true)
+        {
+            this.Space.Global.MapIDNum += 1;
+            this.GamePadDown = false;
+        }
+        if(this.GamePadDown2 == true)
+        {
+            this.Space.Global.MapIDNum += 1;
+            this.GamePadDown2 = false;
+        }
+        
+        //Select Up
+        if(this.GamePadUp == true)
+        {
+            this.Space.Global.MapIDNum -= 1;
+            this.GamePadUp = false;
+        }
+        if(this.GamePadUp2 == true)
+        {
+            this.Space.Global.MapIDNum -= 1;
+            this.GamePadUp2 = false;
+        }
+    }
+}

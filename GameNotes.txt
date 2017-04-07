@@ -1,0 +1,26 @@
+Game like lethal league
+
+Includes
+character select screen
+ -Austin
+ -Tung
+ -Peyton
+ -Tre
+ -Julio
+ -Sedrick
+
+Notes:
+
+Jump animation is single frame
+fall animation is single frame
+3 frame attack animation
+
+ball should have a up, down, left, and right animation
+
+
+Arrows and direction that your facing determines the direction of the ball
+
+when ball is hit take ball's current x and y volocity and add it to the
+new direction plus a percentage of the new one
+
+add more freedom while in air

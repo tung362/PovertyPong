@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "DontGoThroughWalls",
+		uint64 ResourceId = 54e7ce53c3113445,
+	},
+},

@@ -1,0 +1,29 @@
+class BallSpawn : ZilchComponent
+{
+    var Timer : Real = 0.0;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var deltaTime = event.Dt;
+        
+        var ball = this.Space.FindObjectByName("Ball");
+        var pos = this.Owner.Transform.Translation;
+        
+        if(ball == null && this.Space.Global.P1Score < 5 && this.Space.Global.P2Score < 5)
+        {
+            this.Timer += deltaTime;
+            
+            if(this.Timer > 2)
+            {
+                var theball: Archetype = Archetype.Find("Ball");
+                var spawnedball = this.Space.CreateAtPosition(theball, Real3(pos.X, pos.Y, pos.Z));
+                this.Timer = 0;
+            }
+        }
+    }
+}

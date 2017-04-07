@@ -1,0 +1,134 @@
+class DifficultyButton : ZilchComponent
+{
+    //Controller ID
+    [Property]
+    var PlayerIndex : Integer = 0;
+    [Property]
+    var PlayerIndex2 : Integer = 1;
+    // The gamepad that our player is using
+    var Controller:Gamepad = null;
+    var Controller2:Gamepad = null;
+    [Property]
+    var ButtonID : Integer = 1;
+    var MouseCollided : Boolean = false;
+    [Property]
+    var ControllerCheck : Boolean = true;
+    
+    [Property]
+    var DifficultyNum : Integer = 1;
+    [Property]
+    var R : Real = 0;
+    [Property]
+    var G : Real = 255;
+    [Property]
+    var B : Real = 10;
+    [Property]
+    var TheLevel : Level = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        this.Controller = Zero.Gamepads.GetGamePad(this.PlayerIndex);
+        this.Controller2 = Zero.Gamepads.GetGamePad(this.PlayerIndex2);
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        Zero.Connect(this.Owner, Events.MouseEnter, this.OnMouseEnter);
+        Zero.Connect(this.Owner, Events.MouseExit, this.OnMouseExit);
+        Zero.Connect(this.Owner, Events.MouseDown, this.OnMouseDown);
+        Zero.Connect(this.Owner, Events.MouseUp, this.OnMouseUp);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var parent = this.Owner.Parent;
+        var gamePadMouse = this.Space.FindObjectByName("GamePadMouse");
+        
+        if(this.Controller.IsActive && this.ControllerCheck == true)
+        {
+            if(gamePadMouse.GamePadMouse.CurrentButtonNumber == this.ButtonID)
+            {
+                this.Owner.SpriteText.Color = Real4(1, 1, 1, 1);
+                
+                if(this.Controller.IsButtonPressed(Buttons.A))
+                {
+                    this.Space.Global.P1Score = 0;
+                    this.Space.Global.P2Score = 0;
+                    this.Space.Global.P1Mode2Score = 0;
+                    this.Space.Global.P2Mode2Score = 0;
+                    this.Space.Global.Difficulty = this.DifficultyNum;
+                    this.Space.LoadLevel(this.TheLevel);
+                }
+            }
+            else
+            {
+                if(this.MouseCollided == false)
+                {
+                    this.Owner.SpriteText.Color = Real4(this.R / 255, this.G / 255, this.B / 255, 1);
+                }
+            }
+        }
+        
+        if(this.Controller2.IsActive && this.ControllerCheck == true)
+        {
+            if(gamePadMouse.GamePadMouse.CurrentButtonNumber == this.ButtonID)
+            {
+                this.Owner.SpriteText.Color = Real4(1, 1, 1, 1);
+                
+                if(this.Controller2.IsButtonPressed(Buttons.A))
+                {
+                    this.Space.Global.P1Score = 0;
+                    this.Space.Global.P2Score = 0;
+                    this.Space.Global.P1Mode2Score = 0;
+                    this.Space.Global.P2Mode2Score = 0;
+                    this.Space.Global.Difficulty = this.DifficultyNum;
+                    this.Space.LoadLevel(this.TheLevel);
+                }
+            }
+            else
+            {
+                if(this.MouseCollided == false)
+                {
+                    this.Owner.SpriteText.Color = Real4(this.R / 255, this.G / 255, this.B / 255, 1);
+                }
+            }
+        }
+    }
+    
+    function OnMouseUp(event : ViewportMouseEvent)
+    {
+        //Let Go Of Click
+        
+        this.Space.Global.P1Score = 0;
+        this.Space.Global.P2Score = 0;
+        this.Space.Global.P1Mode2Score = 0;
+        this.Space.Global.P2Mode2Score = 0;
+        this.Space.Global.Difficulty = this.DifficultyNum;
+        this.Space.LoadLevel(this.TheLevel);
+    }
+    
+    function OnMouseDown(event : ViewportMouseEvent)
+    {
+        //Clicked
+        
+        this.MouseCollided = true;
+        this.Owner.SpriteText.Color = Real4(1, 1, 1, 1);
+    }
+    
+    function OnMouseExit(event : ViewportMouseEvent)
+    {
+        //Exiting Button
+        
+        var r = this.R;
+        var g = this.G;
+        var b = this.B;
+        
+        this.Owner.SpriteText.Color = Real4(this.R / 255, this.G / 255, this.B / 255, 1);
+        this.MouseCollided = false;
+    }
+    
+    function OnMouseEnter(event : ViewportMouseEvent)
+    {
+        //Entering Button
+        
+        this.MouseCollided = true;
+        this.Owner.SpriteText.Color = Real4(1, 1, 1, 1);
+    }
+}

@@ -1,0 +1,30 @@
+Cog = 
+{
+	LinkId = 
+	{
+		uint Id = 1,
+	},
+	Named = 
+	{
+		string Name = "BackgroundMusic",
+	},
+	Archetyped = 
+	{
+		string Name = "5584ee169dc8fe8f:BackgroundMusic",
+	},
+	Transform = 
+	{
+		Vec3 Translation = [3.81418, -1.97663, -8.18807],
+		Vec3 Scale = [1, 1, 1],
+		Quat Rotation = [0, 0, 0, 1],
+	},
+	SoundEmitter = 
+	{
+		bool StartPlaying = false,
+		int ExtraPriority = 0,
+		string CueName = "5596676b6c3dfac8:MainMenu",
+		float Volume = 1,
+		float Pitch = 1,
+		bool Positional = false,
+	},
+},

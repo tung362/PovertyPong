@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "MainMenuSound",
+		uint64 ResourceId = 559727f2ab52b8e1,
+	},
+},

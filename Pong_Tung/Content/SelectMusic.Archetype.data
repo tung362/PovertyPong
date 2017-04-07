@@ -1,0 +1,30 @@
+Cog = 
+{
+	LinkId = 
+	{
+		uint Id = 1,
+	},
+	Named = 
+	{
+		string Name = "SelectMusic",
+	},
+	Archetyped = 
+	{
+		string Name = "5596680755ec4279:SelectMusic",
+	},
+	Transform = 
+	{
+		Vec3 Translation = [3.81418, -1.97663, -8.18807],
+		Vec3 Scale = [1, 1, 1],
+		Quat Rotation = [0, 0, 0, 1],
+	},
+	SoundEmitter = 
+	{
+		bool StartPlaying = false,
+		int ExtraPriority = 0,
+		string CueName = "5584eb7138df763c:TakeIt",
+		float Volume = 0,
+		float Pitch = 1,
+		bool Positional = false,
+	},
+},

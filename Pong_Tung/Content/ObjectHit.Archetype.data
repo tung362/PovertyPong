@@ -1,0 +1,41 @@
+Cog = 
+{
+	LinkId = 
+	{
+		uint Id = 1,
+	},
+	Named = 
+	{
+		string Name = "ObjectHit",
+	},
+	Archetyped = 
+	{
+		string Name = "5436cc6ef4435e73:ObjectHit",
+	},
+	Transform = 
+	{
+		Vec3 Translation = [1.60385, 1.07679, 25.1032],
+		Vec3 Scale = [8, 8, 1],
+		Quat Rotation = [0, 0, 0, 1],
+	},
+	Sprite = 
+	{
+		bool Visible = true,
+		bool VisibilityCulling = false,
+		Vec4 Color = [1, 1, 1, 1],
+		BlendMode BlendMode = Alpha,
+		SpriteGeometryMode GeometryMode = ZPlane,
+		string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+		string SpriteSource = "5436cc430e54d6e1:ObjectHit",
+		bool RenderMask = false,
+		bool FlipX = false,
+		bool FlipY = false,
+		bool OnTop = false,
+		bool AnimationActive = true,
+		float AnimationSpeed = 1,
+		uint StartFrame = 0,
+	},
+	ObjectHit = 
+	{
+	},
+},

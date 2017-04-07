@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "P2Tre",
+		uint64 ResourceId = 542b429894c4f8e7,
+	},
+},

@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "CSTung",
+		uint64 ResourceId = 542b53a943e13d76,
+	},
+},

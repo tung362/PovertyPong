@@ -1,0 +1,1028 @@
+Level = 
+{
+	LevelSettings = 
+	{
+		LinkId = 
+		{
+			uint Id = 1,
+		},
+		Named = 
+		{
+			string Name = "LevelSettings",
+		},
+		GravityEffect = 
+		{
+			bool Active = true,
+			bool WakeUpOnChange = false,
+			bool LocalSpaceDirection = true,
+			float Strength = 10,
+			Vec3 Direction = [0, -1, 0],
+		},
+		DragEffect = 
+		{
+			bool Active = false,
+			bool WakeUpOnChange = false,
+			float Drag = 0.7,
+		},
+		CameraViewport = 
+		{
+			bool Background = true,
+			Vec2 Offset = [0, 0],
+			Vec2 Size = [1, 1],
+			int Layer = 0,
+			bool Active = true,
+			bool Blocking = true,
+			uint Renderer = 1,
+			uint Camera = 2,
+			ViewportScaling Scaling = Fill,
+			Vec2 Resolution = [1280, 720],
+			Vec4 MarginColor = [0, 0, 0, 1],
+		},
+		DeferredRenderer = 
+		{
+			Vec4 ClearColor = [0, 0, 0, 1],
+			bool DrawNonVisible = false,
+			bool DrawDebugObjects = true,
+			bool DrawEditorIcons = true,
+			bool EditorIconDepth = true,
+			bool Hdr = true,
+			bool Shadows = true,
+			bool AntiAliasing = false,
+			bool Refraction = true,
+			bool GodRays = true,
+			bool RenderMasks = false,
+			bool Glow = true,
+			float GlowThreshold = 1,
+		},
+		GridDraw = 
+		{
+			bool Active = true,
+			bool HalfCellOffset = false,
+			float CellSize = 1,
+			GridAxis Axis = ZAxis,
+			int Lines = 100,
+			bool DrawAxisOrigins = true,
+			bool AlwaysDrawInEditor = true,
+			bool DrawInGame = false,
+			Vec4 GridColor = [0.5, 0.5, 0.5, 0.4],
+			Vec4 GridHiLight = [0, 0, 0, 0.4],
+			int HilightInterval = 10,
+			bool FollowEditorCamera = false,
+		},
+		WinLoseModeOne = 
+		{
+			string Win = "5436c4faaeb75947:ModeOneWin",
+			string Lose = "5436c1061aeec64e:ModeOneLose",
+			string MainMenu = "5436c28d25113948:MainMenu",
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 3,
+		},
+		Named = 
+		{
+			string Name = "EditorCamera",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [5.37917, 3.43006, 49.4295],
+			Vec3 Scale = [1, 1, 1],
+			Quat Rotation = [-0.11429, 0.231823, 0.0274381, 0.965631],
+		},
+		Camera = 
+		{
+			ProjectionMode ProjectionMode = Perspective,
+			Facing Facing = NegativeZ,
+			CameraTransparentSort TransparentSort = InheritFromSpace,
+			float FieldOfView = 45,
+			float NearPlane = 0.5,
+			float FarPlane = 500,
+			float Size = 20,
+		},
+		EditorCameraController = 
+		{
+			ControlMode ControlMode = Orbit,
+			float LookDistance = 27.5119,
+			float VerticalAngle = 0.23562,
+			float HorizontalAngle = -13.0376,
+			Vec3 LookTarget = [-6.76562, -2.99248, 25.5934],
+			float MoveSensitivity = 1,
+		},
+		EditorRenderer = 
+		{
+			Vec4 ClearColor = [0.155, 0.155, 0.155, 1],
+			bool DrawNonVisible = true,
+			bool DrawDebugObjects = true,
+			bool DrawEditorIcons = true,
+			bool Wireframe = false,
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 2,
+		},
+		Named = 
+		{
+			string Name = "Camera",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [0, -2.55, 44.9868],
+			Vec3 Scale = [1, 1, 1],
+			Quat Rotation = [0, 0, 0, 1],
+		},
+		Camera = 
+		{
+			ProjectionMode ProjectionMode = Perspective,
+			Facing Facing = NegativeZ,
+			CameraTransparentSort TransparentSort = InheritFromSpace,
+			float FieldOfView = 60,
+			float NearPlane = 0.5,
+			float FarPlane = 5000,
+			float Size = 20,
+		},
+		Microphone = 
+		{
+			bool Active = true,
+		},
+		Hierarchy = 
+		{
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 4,
+				},
+				Named = 
+				{
+					string Name = "Player1ScoreText",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [-8.0761, 5.01327, -9.03948],
+					Vec3 Scale = [1.5, 1.5, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				SpriteText = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					Vec4 Color = [1, 1, 1, 1],
+					BlendMode BlendMode = Alpha,
+					SpriteGeometryMode GeometryMode = ZPlane,
+					string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+					TextPositionMode Position = UpperLeft,
+					string FontName = "543c2fd78e95d7e1:4",
+					uint FontSize = 30,
+					string Text = "Player 1 Score:",
+					bool OnTop = false,
+					Vec2 Size = [0, 0],
+					TextAlign Align = Left,
+					float PixelsPerUnit = 64,
+					bool Smoothing = false,
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 5,
+				},
+				Named = 
+				{
+					string Name = "Player1ScoreText",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [-3.69887, 5.165, -9.03948],
+					Vec3 Scale = [1.8, 1.8, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				SpriteText = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					Vec4 Color = [0, 1, 0.00999975, 1],
+					BlendMode BlendMode = Alpha,
+					SpriteGeometryMode GeometryMode = ZPlane,
+					string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+					TextPositionMode Position = UpperLeft,
+					string FontName = "543c2fd78e984f18:2",
+					uint FontSize = 30,
+					string Text = "0",
+					bool OnTop = false,
+					Vec2 Size = [0, 0],
+					TextAlign Align = Left,
+					float PixelsPerUnit = 64,
+					bool Smoothing = false,
+				},
+				Player1ScoreText = 
+				{
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 6,
+				},
+				Named = 
+				{
+					string Name = "Player2ScoreText",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [-3.57729, 4.39878, -9.03948],
+					Vec3 Scale = [1.8, 1.8, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				SpriteText = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					Vec4 Color = [1, 0, 0, 1],
+					BlendMode BlendMode = Alpha,
+					SpriteGeometryMode GeometryMode = ZPlane,
+					string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+					TextPositionMode Position = UpperLeft,
+					string FontName = "543c2fd78e984f18:2",
+					uint FontSize = 30,
+					string Text = "0",
+					bool OnTop = false,
+					Vec2 Size = [0, 0],
+					TextAlign Align = Left,
+					float PixelsPerUnit = 64,
+					bool Smoothing = false,
+				},
+				Player2ScoreText = 
+				{
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 7,
+				},
+				Named = 
+				{
+					string Name = "Player2ScoreText",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [-8.0761, 4.24705, -9.03948],
+					Vec3 Scale = [1.5, 1.5, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				SpriteText = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					Vec4 Color = [1, 0.42, 0, 1],
+					BlendMode BlendMode = Alpha,
+					SpriteGeometryMode GeometryMode = ZPlane,
+					string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+					TextPositionMode Position = UpperLeft,
+					string FontName = "543c2fd78e95d7e1:4",
+					uint FontSize = 30,
+					string Text = "Player 2 Score:",
+					bool OnTop = false,
+					Vec2 Size = [0, 0],
+					TextAlign Align = Left,
+					float PixelsPerUnit = 64,
+					bool Smoothing = false,
+				},
+			},
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 8,
+		},
+		Named = 
+		{
+			string Name = "PointLight",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [0, -2.55, 7.40646],
+			Vec3 Scale = [1, 1, 1],
+			Quat Rotation = [0, 0, 0, 1],
+		},
+		Light = 
+		{
+			bool Visible = true,
+			bool VisibilityCulling = true,
+			bool VisibilityEvents = false,
+			bool CastShadows = false,
+			LightType LightType = Point,
+			Vec4 Color = [0.225, 0.225, 0.225, 1],
+			float Intensity = 1,
+			float Range = 40,
+			float Falloff = 1,
+			float Angle = 45,
+			float Size = 20,
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 9,
+		},
+		Named = 
+		{
+			string Name = "WallRight",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [15, -2.55, 15.4202],
+			Vec3 Scale = [30, 21, 0.1],
+			Quat Rotation = [0, 0.707107, 0, 0.707107],
+		},
+		Model = 
+		{
+			bool Visible = true,
+			bool VisibilityCulling = false,
+			bool VisibilityEvents = false,
+			bool CastShadows = true,
+			string MaterialName = "543db29ae326018f:Light",
+			string MeshName = "4de0354322b345ae:Cube",
+			Vec4 Color = [1, 1, 1, 1],
+		},
+		BoxCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5d07a4c3b865:BallWall",
+			Vec3 Offset = [0, 0, 0],
+			Vec3 Size = [0.5, 0.5, 0.5],
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 10,
+		},
+		Named = 
+		{
+			string Name = "WallLeft",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [-15, -2.55, 15.4202],
+			Vec3 Scale = [30, 21, 0.1],
+			Quat Rotation = [0, 0.707107, 0, 0.707107],
+		},
+		Model = 
+		{
+			bool Visible = true,
+			bool VisibilityCulling = false,
+			bool VisibilityEvents = false,
+			bool CastShadows = true,
+			string MaterialName = "543db29ae326018f:Light",
+			string MeshName = "4de0354322b345ae:Cube",
+			Vec4 Color = [1, 1, 1, 1],
+		},
+		BoxCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5d07a4c3b865:BallWall",
+			Vec3 Offset = [0, 0, 0],
+			Vec3 Size = [0.5, 0.5, 0.5],
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 11,
+		},
+		Named = 
+		{
+			string Name = "WallTop",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [0, 7.9, 15.4202],
+			Vec3 Scale = [30, 29.9, 0.1],
+			Quat Rotation = [-0.5, 0.5, 0.5, 0.5],
+		},
+		Model = 
+		{
+			bool Visible = true,
+			bool VisibilityCulling = false,
+			bool VisibilityEvents = false,
+			bool CastShadows = true,
+			string MaterialName = "543db29ae326018f:Light",
+			string MeshName = "4de0354322b345ae:Cube",
+			Vec4 Color = [1, 1, 1, 1],
+		},
+		BoxCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5d07a4c3b865:BallWall",
+			Vec3 Offset = [0, 0, 0],
+			Vec3 Size = [0.5, 0.5, 0.5],
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 12,
+		},
+		Named = 
+		{
+			string Name = "WallBottom",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [0, -13, 15.4202],
+			Vec3 Scale = [30, 29.9, 0.1],
+			Quat Rotation = [0.5, 0.5, -0.5, 0.5],
+		},
+		Model = 
+		{
+			bool Visible = true,
+			bool VisibilityCulling = false,
+			bool VisibilityEvents = false,
+			bool CastShadows = true,
+			string MaterialName = "543db29ae326018f:Light",
+			string MeshName = "4de0354322b345ae:Cube",
+			Vec4 Color = [1, 1, 1, 1],
+		},
+		BoxCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5d07a4c3b865:BallWall",
+			Vec3 Offset = [0, 0, 0],
+			Vec3 Size = [0.5, 0.5, 0.5],
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 13,
+		},
+		Named = 
+		{
+			string Name = "Player1",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [0, -2.55, 30],
+			Vec3 Scale = [4, 4, 1],
+			Quat Rotation = [0, 0, 0, 1],
+		},
+		Sprite = 
+		{
+			bool Visible = true,
+			bool VisibilityCulling = true,
+			bool VisibilityEvents = false,
+			bool CastShadows = false,
+			Vec4 Color = [1, 1, 1, 1],
+			BlendMode BlendMode = Alpha,
+			SpriteGeometryMode GeometryMode = ZPlane,
+			string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+			string SpriteSource = "543c795ae7ded77d:Player1",
+			bool RenderMask = false,
+			bool FlipX = false,
+			bool FlipY = false,
+			bool OnTop = false,
+			bool AnimationActive = true,
+			float AnimationSpeed = 1,
+			uint StartFrame = 0,
+		},
+		BoxCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5e81c6af7e1b:Player",
+			Vec3 Offset = [0, 0, 0],
+			Vec3 Size = [0.775, 0.5, 0.5],
+		},
+		Player1Movement = 
+		{
+		},
+		Hierarchy = 
+		{
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 14,
+		},
+		Named = 
+		{
+			string Name = "Player2",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [0, -2.55, 0.88179],
+			Vec3 Scale = [4, 4, 1],
+			Quat Rotation = [0, 0, 0, 1],
+		},
+		Sprite = 
+		{
+			bool Visible = true,
+			bool VisibilityCulling = true,
+			bool VisibilityEvents = false,
+			bool CastShadows = false,
+			Vec4 Color = [1, 1, 1, 1],
+			BlendMode BlendMode = Alpha,
+			SpriteGeometryMode GeometryMode = ZPlane,
+			string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+			string SpriteSource = "543c7ab7f805543a:Player2",
+			bool RenderMask = false,
+			bool FlipX = false,
+			bool FlipY = false,
+			bool OnTop = false,
+			bool AnimationActive = true,
+			float AnimationSpeed = 1,
+			uint StartFrame = 0,
+		},
+		BoxCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5e81c6af7e1b:Player",
+			Vec3 Offset = [0, 0, 0],
+			Vec3 Size = [0.775, 0.5, 0.5],
+		},
+		Player2Movement = 
+		{
+			float ChaseSpeed = 6,
+		},
+		RigidBody = 
+		{
+			bool Static = false,
+			bool Asleep = false,
+			bool Kinematic = false,
+			bool RotationLocked = true,
+			bool Mode2D = false,
+			bool AllowSleep = true,
+			bool Inherit2DMode = true,
+			Vec3 Velocity = [0, 0, 0],
+			Vec3 AngularVelocity = [0, 0, 0],
+		},
+		DragEffect = 
+		{
+			bool Active = true,
+			bool WakeUpOnChange = true,
+			float Drag = 0,
+		},
+		GravityEffect = 
+		{
+			bool Active = true,
+			bool WakeUpOnChange = true,
+			bool LocalSpaceDirection = false,
+			float Strength = 10,
+			Vec3 Direction = [0, 1, 0],
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 15,
+		},
+		Named = 
+		{
+			string Name = "Ball",
+		},
+		Archetyped = 
+		{
+			string Name = "543c43d371e69404:Ball",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [1.87432, -3.183, 18.0171],
+			Vec3 Scale = [1, 1, 1],
+			Quat Rotation = [0, 0, 0, 1],
+		},
+		Model = 
+		{
+			bool Visible = true,
+			bool VisibilityCulling = true,
+			bool VisibilityEvents = false,
+			bool CastShadows = true,
+			string MaterialName = "543d99bbda1181ad:Ball",
+			string MeshName = "4de0354322b376ae:Sphere",
+			Vec4 Color = [1, 1, 1, 1],
+		},
+		RigidBody = 
+		{
+			bool Static = false,
+			bool Asleep = false,
+			bool Kinematic = false,
+			bool RotationLocked = false,
+			bool Mode2D = false,
+			bool AllowSleep = true,
+			bool Inherit2DMode = true,
+			Vec3 Velocity = [0, 0, 0],
+			Vec3 AngularVelocity = [0, 0, 0],
+		},
+		SphereCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5d08b861305e:Ball",
+			Vec3 Offset = [0, 0, 0],
+			float Radius = 1,
+		},
+		DragEffect = 
+		{
+			bool Active = true,
+			bool WakeUpOnChange = true,
+			float Drag = 0,
+		},
+		GravityEffect = 
+		{
+			bool Active = true,
+			bool WakeUpOnChange = true,
+			bool LocalSpaceDirection = false,
+			float Strength = 10,
+			Vec3 Direction = [0, 1, 0],
+		},
+		BallMovement = 
+		{
+			float Speed = 900,
+		},
+		Hierarchy = 
+		{
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 16,
+				},
+				Named = 
+				{
+					string Name = "BallLight1",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [1.50099, 0, 0],
+					Vec3 Scale = [1, 1, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				Light = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					LightType LightType = Point,
+					Vec4 Color = [0, 1, 0.00999975, 1],
+					float Intensity = 1,
+					float Range = 10,
+					float Falloff = 1,
+					float Angle = 10,
+					float Size = 20,
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 17,
+				},
+				Named = 
+				{
+					string Name = "BallLight2",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [-1.87432, 0, 0],
+					Vec3 Scale = [1, 1, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				Light = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					LightType LightType = Point,
+					Vec4 Color = [1, 0, 0, 1],
+					float Intensity = 1,
+					float Range = 10,
+					float Falloff = 1,
+					float Angle = 10,
+					float Size = 20,
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 18,
+				},
+				Named = 
+				{
+					string Name = "BallLight3",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [0, -1.87432, 0],
+					Vec3 Scale = [1, 1, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				Light = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					LightType LightType = Point,
+					Vec4 Color = [0.0199995, 0, 1, 1],
+					float Intensity = 1,
+					float Range = 10,
+					float Falloff = 1,
+					float Angle = 10,
+					float Size = 20,
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 19,
+				},
+				Named = 
+				{
+					string Name = "BallLight4",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [0, 1.87432, 0],
+					Vec3 Scale = [1, 1, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				Light = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					LightType LightType = Point,
+					Vec4 Color = [1, 0.99, 0, 1],
+					float Intensity = 1,
+					float Range = 10,
+					float Falloff = 1,
+					float Angle = 10,
+					float Size = 20,
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 20,
+				},
+				Named = 
+				{
+					string Name = "BallLight5",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [0, 0, 1.87432],
+					Vec3 Scale = [1, 1, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				Light = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					LightType LightType = Point,
+					Vec4 Color = [1, 0.69, 0, 1],
+					float Intensity = 1,
+					float Range = 10,
+					float Falloff = 1,
+					float Angle = 10,
+					float Size = 20,
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 21,
+				},
+				Named = 
+				{
+					string Name = "BallLight6",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [0, 0, -1.87432],
+					Vec3 Scale = [1, 1, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				Light = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					LightType LightType = Point,
+					Vec4 Color = [1, 0, 0.93, 1],
+					float Intensity = 1,
+					float Range = 10,
+					float Falloff = 1,
+					float Angle = 10,
+					float Size = 20,
+				},
+			},
+			Cog = 
+			{
+				LinkId = 
+				{
+					uint Id = 22,
+				},
+				Named = 
+				{
+					string Name = "BasicParticleEffect",
+				},
+				Transform = 
+				{
+					Vec3 Translation = [0, 0, 0],
+					Vec3 Scale = [1, 1, 1],
+					Quat Rotation = [0, 0, 0, 1],
+				},
+				SpriteParticleSystem = 
+				{
+					bool Visible = true,
+					bool VisibilityCulling = true,
+					bool VisibilityEvents = false,
+					bool CastShadows = false,
+					SystemChildMode ChildMode = Independent,
+					SystemSpace SystemSpace = WorldSpace,
+					uint DrawOrder = 0,
+					float WarmUpTime = 0,
+					ParticleGeometry GeometryMode = Billboarded,
+					ParticleRenderMode RenderMode = Blended,
+					ParticleSortMode SortMode = Youngest,
+					ParticleAnimation ParticleAnimation = Single,
+					string Texture = "4fab71e8bcb7a8ce:DefaultTexture",
+					Vec4 Tint = [1, 1, 1, 1],
+					float VelocityScale = 1,
+					float LengthScale = 1,
+					float MaxParticleSize = 100,
+					Vec3 SystemSize = [4, 4, 4],
+				},
+				SphericalParticleEmitter = 
+				{
+					bool Active = true,
+					uint EmitCount = 0,
+					float EmitRate = 100,
+					float EmitVariance = 0,
+					float Size = 0.2,
+					float SizeVariance = 0.4,
+					float Lifetime = 2,
+					float LifetimeVariance = 3,
+					float Spin = 0,
+					float SpinVariance = 50,
+					bool RandomSpin = true,
+					float Fill = 1,
+					float EmitterVelocityPercent = 0,
+					Vec3 StartVelocity = [0, 0, 0],
+					Vec3 RandomVelocity = [2, 2, 2],
+					Vec3 TangentVelocity = [0, 0, 0],
+					Vec3 EmitterSize = [0, 0, 0],
+					bool FastMovingEmitter = false,
+				},
+				LinearParticleAnimator = 
+				{
+					Vec3 Force = [0, 0, 0],
+					Vec3 RandomForce = [0, 0, 0],
+					float Torque = 0,
+					float Growth = 0,
+					float Dampening = 10,
+					Vec3 Twist = [0, 0, 0],
+				},
+				ParticleColorAnimator = 
+				{
+					Vec4 Color0 = [0.23, 1, 0, 1],
+					Vec4 Color1 = [0.56, 1, 0, 1],
+					Vec4 Color2 = [0.23, 1, 0, 1],
+					Vec4 Color3 = [1, 0.54, 0, 1],
+					Vec4 Color4 = [1, 0, 0, 0],
+				},
+			},
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 23,
+		},
+		Named = 
+		{
+			string Name = "Player1BadBox",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [0, -3.3253, 31.3311],
+			Vec3 Scale = [32, 25, 0.1],
+			Quat Rotation = [0, 0, 0, 1],
+		},
+		BoxCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5d07a4c3b865:BallWall",
+			Vec3 Offset = [0, 0, 0],
+			Vec3 Size = [0.5, 0.5, 0.5],
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 24,
+		},
+		Named = 
+		{
+			string Name = "Player2BadBox",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [0, -3.3253, -0.0664015],
+			Vec3 Scale = [32, 25, 0.1],
+			Quat Rotation = [0, 0, 0, 1],
+		},
+		BoxCollider = 
+		{
+			bool Ghost = false,
+			bool SendsMessages = true,
+			bool Seamless = true,
+			string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+			string SerializedGroupName = "543c5d07a4c3b865:BallWall",
+			Vec3 Offset = [0, 0, 0],
+			Vec3 Size = [0.5, 0.5, 0.5],
+		},
+	},
+	Cog = 
+	{
+		LinkId = 
+		{
+			uint Id = 25,
+		},
+		Named = 
+		{
+			string Name = "BallSpawn",
+		},
+		Transform = 
+		{
+			Vec3 Translation = [1.87432, -3.183, 18.0171],
+			Vec3 Scale = [1, 1, 1],
+			Quat Rotation = [0, 0, 0, 1],
+		},
+		BallSpawn = 
+		{
+		},
+	},
+},

@@ -1,0 +1,12 @@
+[Property]
+
+real = int or float
+real3 = vec3
+
+Print statment: Console.WriteLine("test");
+
+deltatime: event.Dt
+
+Randoms:
+Uniform = rand.Range(-1, 1)
+RandInt = rand.DieRoll(10)

@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "TungMovement",
+		uint64 ResourceId = 5429a74f4844039c,
+	},
+},

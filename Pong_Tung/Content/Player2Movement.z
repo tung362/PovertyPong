@@ -1,0 +1,79 @@
+class Player2Movement : ZilchComponent
+{
+    [Property]
+    var ChaseSpeed : Real = 10.0;
+    
+    var VerticleDistance : Real = 0;
+    var HorizontalDistance : Real = 0;
+    var ChaseDirection : Real3 = Real3(0, 0, 0);
+    
+    var CanMove : Boolean = true;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var rand : Random = Random();
+        var ball = this.Space.FindObjectByName("Ball");
+        var playPosition = this.Owner.Transform.Translation;
+        
+        if(ball != null)
+        {
+            if(ball.Transform.Translation.Z <= 25 && this.Space.Global.Difficulty == 1)
+            {
+                if(this.CanMove == true)
+                {
+                    this.ChaseSpeed = 150;
+                    this.CanMove = false;
+                }
+                
+                var distance = ball.Transform.Translation - playPosition;
+                this.VerticleDistance = distance.Y;
+                this.HorizontalDistance = distance.X;
+                
+                this.ChaseDirection = Real3(playPosition.X + this.HorizontalDistance, playPosition.Y + this.VerticleDistance, 30) - this.Owner.Transform.Translation;
+                this.Owner.RigidBody.Velocity = Real3(this.ChaseDirection.X, this.ChaseDirection.Y, 0) * event.Dt * this.ChaseSpeed;
+            }
+            
+            else if(ball.Transform.Translation.Z <= 25 && this.Space.Global.Difficulty == 2)
+            {
+                if(this.CanMove == true)
+                {
+                    this.ChaseSpeed = 200;
+                    this.CanMove = false;
+                }
+                
+                var distance = ball.Transform.Translation - playPosition;
+                this.VerticleDistance = distance.Y;
+                this.HorizontalDistance = distance.X;
+                
+                this.ChaseDirection = Real3(playPosition.X + this.HorizontalDistance, playPosition.Y + this.VerticleDistance, 30) - this.Owner.Transform.Translation;
+                this.Owner.RigidBody.Velocity = Real3(this.ChaseDirection.X, this.ChaseDirection.Y, 0) * event.Dt * this.ChaseSpeed;
+            }
+            
+            else if(ball.Transform.Translation.Z <= 25 && this.Space.Global.Difficulty == 3)
+            {
+                if(this.CanMove == true)
+                {
+                    this.ChaseSpeed = 300;
+                    this.CanMove = false;
+                }
+                
+                var distance = ball.Transform.Translation - playPosition;
+                this.VerticleDistance = distance.Y;
+                this.HorizontalDistance = distance.X;
+                
+                this.ChaseDirection = Real3(playPosition.X + this.HorizontalDistance, playPosition.Y + this.VerticleDistance, 30) - this.Owner.Transform.Translation;
+                this.Owner.RigidBody.Velocity = Real3(this.ChaseDirection.X, this.ChaseDirection.Y, 0) * event.Dt * this.ChaseSpeed;
+            }
+            else
+            {
+                this.CanMove = true;
+                this.Owner.RigidBody.Velocity = Real3(0, 0, 0);
+            }
+        }
+    }
+}

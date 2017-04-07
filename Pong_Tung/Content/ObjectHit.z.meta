@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "ObjectHit",
+		uint64 ResourceId = 5436c9354b6a6482,
+	},
+},

@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "TungController",
+		uint64 ResourceId = 5429bc474dc64171,
+	},
+},

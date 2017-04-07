@@ -1,0 +1,45 @@
+class Mode2WinLose : ZilchComponent
+{
+    var Timer : Real = 0.0;
+    
+    [Property]
+    var Win : Level = null;
+    
+    [Property]
+    var MainMenu : Level = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var deltaTime = event.Dt;
+        
+        if(this.Space.Global.P1Mode2Score >= 5)
+        {
+            this.Timer += deltaTime;
+            
+            if(this.Timer > 3)
+            {
+                this.Space.LoadLevel(this.Win);
+            }
+        }
+        
+        else if(this.Space.Global.P2Mode2Score >= 5)
+        {
+            this.Timer += deltaTime;
+            
+            if(this.Timer > 3)
+            {
+                this.Space.LoadLevel(this.Win);
+            }
+        }
+        
+        if(Zero.Keyboard.KeyIsPressed(Keys.Escape))
+        {
+            this.Space.LoadLevel(this.MainMenu);
+        }
+    }
+}

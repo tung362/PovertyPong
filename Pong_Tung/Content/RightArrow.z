@@ -1,0 +1,50 @@
+class RightArrow : ZilchComponent
+{
+    [Property]
+    var R : Real = 242;
+    [Property]
+    var G : Real = 255;
+    [Property]
+    var B : Real = 0;
+    
+    function Initialize(init : CogInitializer)
+    {
+        //Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        Zero.Connect(this.Owner, Events.MouseEnter, this.OnMouseEnter);
+        Zero.Connect(this.Owner, Events.MouseExit, this.OnMouseExit);
+        Zero.Connect(this.Owner, Events.MouseDown, this.OnMouseDown);
+        Zero.Connect(this.Owner, Events.MouseUp, this.OnMouseUp);
+    }
+
+    function OnMouseUp(event : ViewportMouseEvent)
+    {
+        //Let Go Of Click
+        
+        this.Space.Global.MapIDNum += 1;
+    }
+    
+    function OnMouseDown(event : ViewportMouseEvent)
+    {
+        //Clicked
+        
+        this.Owner.Sprite.Color = Real4(1, 1, 1, 1);
+    }
+    
+    function OnMouseExit(event : ViewportMouseEvent)
+    {
+        //Exiting Button
+        
+        var r = this.R;
+        var g = this.G;
+        var b = this.B;
+        
+        this.Owner.Sprite.Color = Real4(this.R / 255, this.G / 255, this.B / 255, 1);
+    }
+    
+    function OnMouseEnter(event : ViewportMouseEvent)
+    {
+        //Entering Button
+        
+        this.Owner.Sprite.Color = Real4(1, 1, 1, 1);
+    }
+}

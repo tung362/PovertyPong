@@ -1,0 +1,425 @@
+Cog = 
+{
+	LinkId = 
+	{
+		uint Id = 1,
+	},
+	Named = 
+	{
+		string Name = "Mode2Julio",
+	},
+	Archetyped = 
+	{
+		string Name = "54e3ebd57af1728c:Mode2Julio",
+	},
+	Transform = 
+	{
+		Vec3 Translation = [0, 0, 0],
+		Vec3 Scale = [8, 8, 1],
+		Quat Rotation = [0, 0, 0, 1],
+	},
+	Sprite = 
+	{
+		bool Visible = true,
+		bool VisibilityCulling = true,
+		bool VisibilityEvents = false,
+		bool CastShadows = false,
+		Vec4 Color = [1, 1, 1, 1],
+		BlendMode BlendMode = Alpha,
+		SpriteGeometryMode GeometryMode = ZPlane,
+		string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+		string SpriteSource = "54e3ebcf75d2c3df:JulioBodyIdle",
+		bool RenderMask = false,
+		bool FlipX = false,
+		bool FlipY = false,
+		bool OnTop = false,
+		bool AnimationActive = true,
+		float AnimationSpeed = 1,
+		uint StartFrame = 0,
+	},
+	RigidBody = 
+	{
+		bool Static = false,
+		bool Asleep = false,
+		bool Kinematic = true,
+		bool RotationLocked = true,
+		bool Mode2D = false,
+		bool AllowSleep = false,
+		bool Inherit2DMode = true,
+		Vec3 Velocity = [0, 0, 0],
+		Vec3 AngularVelocity = [0, 0, 0],
+	},
+	BoxCollider = 
+	{
+		bool Ghost = false,
+		bool SendsMessages = true,
+		bool Seamless = true,
+		string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+		string SerializedGroupName = "5428896f7bf4122d:RealPlayer",
+		Vec3 Offset = [0.015, 0.035, 0],
+		Vec3 Size = [0.095, 0.32, 0.5],
+	},
+	DragEffect = 
+	{
+		bool Active = true,
+		bool WakeUpOnChange = true,
+		float Drag = 0.7,
+	},
+	GravityEffect = 
+	{
+		bool Active = true,
+		bool WakeUpOnChange = true,
+		bool LocalSpaceDirection = false,
+		float Strength = 15,
+		Vec3 Direction = [0, -1, 0],
+	},
+	MassOverride = 
+	{
+		bool Active = true,
+		float invMass = 0.694444,
+		Vec3 invInertiaX = [0.0825082, 0, 0],
+		Vec3 invInertiaY = [0, 0.0825082, 0],
+		Vec3 invInertiaZ = [0, 0, 0.0416667],
+		Vec3 LocalCenterOfMass = [0, 0, 0],
+	},
+	TungController = 
+	{
+		int PlayerIndex = 0,
+		float SwingDelay = 0.5,
+		bool IsPlayer1 = true,
+	},
+	TungAnimation = 
+	{
+		int PlayerIndex = 0,
+		bool IsPlayer1 = true,
+		string PlayerIdle = "54e3ebcf75d2c3df:JulioBodyIdle",
+		string PlayerWalk = "54e3ebb0712e75e3:JulioBodyWalk",
+		string PlayerJump = "54e3eb84471081b0:JulioBodyFall",
+		string PlayerKneel = "54e3ebab4dc89227:JulioBodyKneel",
+		string PlayerSwing = "54e3eba24e47fe2a:JulioBodySwing",
+		string PlayerBunt = "54e3eb7e43f6b224:JulioBodyBunt",
+		string PlayerGroundBunt = "54e3eb7745c2bb6d:JulioBodyGroundBunt",
+		string PlayerJumpAttack = "54e3eb914a27958f:JulioBodyJumpAttack",
+		string PlayerSuperSwing = "54e3e6e7d4d8a4fa:JulioSuperSwing",
+		string PlayerSuperJumpAttack = "54e3e902daf883a8:JulioSuperJumpAttack",
+		string GhostGroup = "5428897865ae9240:Ghost",
+		string SolidGroup = "543c5d2da02cad96:Player1Projectile",
+		float SwingStopperDelay = 0.5,
+		float JSStopperDelay = 0.5,
+		float SwingMaxFrame = 3,
+		float BuntMaxFrame = 2,
+		float JumpAttackMaxFrame = 3,
+		float AirBuntMaxFrame = 2,
+	},
+	TungMovement = 
+	{
+		Vec3 WorldUp = [0, 1, 0],
+		bool LockZAxis = false,
+		bool ForwardEvents = false,
+		float Gravity = 145,
+		float JumpSpeed = 60,
+		float JumpCancelFactor = 0.5,
+		float MaxMoveSpeed = 27,
+		float MaxFallSpeed = 50,
+		float GroundAcceleration = 57,
+		float AirAcceleration = 100,
+		float GroundDeceleration = 50,
+		float AirDeceleration = 10,
+		float MaxGroundSlope = 45,
+		float MaxCeilingSlope = 45,
+		float GroundSnapDistance = 0.1,
+		Vec3 ControllerVelocity = [0, 0, 0],
+		bool Grounded = false,
+		bool Jumping = false,
+		float GroundTraction = 0,
+		float AirTraction = 0,
+	},
+	SoundEmitter = 
+	{
+		bool StartPlaying = false,
+		int ExtraPriority = 0,
+		string CueName = "5584eae5d22501d4:Swing",
+		float Volume = 1,
+		float Pitch = 1,
+		bool Positional = true,
+	},
+	Hierarchy = 
+	{
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 2,
+			},
+			Named = 
+			{
+				string Name = "PlayerRightBunt",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [0.137197, 0.0181498, 0],
+				Vec3 Scale = [0.25, 0.6, 1],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Sprite = 
+			{
+				bool Visible = false,
+				bool VisibilityCulling = true,
+				bool VisibilityEvents = false,
+				bool CastShadows = false,
+				Vec4 Color = [1, 0, 0, 1],
+				BlendMode BlendMode = Alpha,
+				SpriteGeometryMode GeometryMode = ZPlane,
+				string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+				string SpriteSource = "5275aa4d802dd6dc:Square",
+				bool RenderMask = false,
+				bool FlipX = false,
+				bool FlipY = false,
+				bool OnTop = false,
+				bool AnimationActive = true,
+				float AnimationSpeed = 1,
+				uint StartFrame = 0,
+			},
+			BoxCollider = 
+			{
+				bool Ghost = true,
+				bool SendsMessages = true,
+				bool Seamless = true,
+				string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+				string SerializedGroupName = "5428897865ae9240:Ghost",
+				Vec3 Offset = [0, 0, 0],
+				Vec3 Size = [0.5, 0.5, 0.5],
+			},
+		},
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 3,
+			},
+			Named = 
+			{
+				string Name = "PlayerLeftBunt",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [-0.126977, 0.0181498, 0],
+				Vec3 Scale = [0.25, 0.6, 1],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Sprite = 
+			{
+				bool Visible = false,
+				bool VisibilityCulling = true,
+				bool VisibilityEvents = false,
+				bool CastShadows = false,
+				Vec4 Color = [1, 0, 0, 1],
+				BlendMode BlendMode = Alpha,
+				SpriteGeometryMode GeometryMode = ZPlane,
+				string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+				string SpriteSource = "5275aa4d802dd6dc:Square",
+				bool RenderMask = false,
+				bool FlipX = false,
+				bool FlipY = false,
+				bool OnTop = false,
+				bool AnimationActive = true,
+				float AnimationSpeed = 1,
+				uint StartFrame = 0,
+			},
+			BoxCollider = 
+			{
+				bool Ghost = true,
+				bool SendsMessages = true,
+				bool Seamless = true,
+				string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+				string SerializedGroupName = "5428897865ae9240:Ghost",
+				Vec3 Offset = [0, 0, 0],
+				Vec3 Size = [0.5, 0.5, 0.5],
+			},
+		},
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 4,
+			},
+			Named = 
+			{
+				string Name = "PlayerRightSwing",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [0.214417, 0.0216368, 0],
+				Vec3 Scale = [0.3, 0.7, 1],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Sprite = 
+			{
+				bool Visible = false,
+				bool VisibilityCulling = true,
+				bool VisibilityEvents = false,
+				bool CastShadows = false,
+				Vec4 Color = [1, 0, 0, 1],
+				BlendMode BlendMode = Alpha,
+				SpriteGeometryMode GeometryMode = ZPlane,
+				string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+				string SpriteSource = "5275aa4d802dd6dc:Square",
+				bool RenderMask = false,
+				bool FlipX = false,
+				bool FlipY = false,
+				bool OnTop = false,
+				bool AnimationActive = true,
+				float AnimationSpeed = 1,
+				uint StartFrame = 0,
+			},
+			BoxCollider = 
+			{
+				bool Ghost = true,
+				bool SendsMessages = true,
+				bool Seamless = true,
+				string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+				string SerializedGroupName = "5428897865ae9240:Ghost",
+				Vec3 Offset = [0, 0, 0],
+				Vec3 Size = [0.5, 0.5, 0.5],
+			},
+		},
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 5,
+			},
+			Named = 
+			{
+				string Name = "PlayerLeftSwing",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [-0.266983, 0.0216368, 0],
+				Vec3 Scale = [0.3, 0.7, 1],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Sprite = 
+			{
+				bool Visible = false,
+				bool VisibilityCulling = true,
+				bool VisibilityEvents = false,
+				bool CastShadows = false,
+				Vec4 Color = [1, 0, 0, 1],
+				BlendMode BlendMode = Alpha,
+				SpriteGeometryMode GeometryMode = ZPlane,
+				string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+				string SpriteSource = "5275aa4d802dd6dc:Square",
+				bool RenderMask = false,
+				bool FlipX = false,
+				bool FlipY = false,
+				bool OnTop = false,
+				bool AnimationActive = true,
+				float AnimationSpeed = 1,
+				uint StartFrame = 0,
+			},
+			BoxCollider = 
+			{
+				bool Ghost = true,
+				bool SendsMessages = true,
+				bool Seamless = true,
+				string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+				string SerializedGroupName = "5428897865ae9240:Ghost",
+				Vec3 Offset = [0, 0, 0],
+				Vec3 Size = [0.5, 0.5, 0.5],
+			},
+		},
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 6,
+			},
+			Named = 
+			{
+				string Name = "PlayerLeftJA",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [-0.266983, 0.0216368, 0],
+				Vec3 Scale = [0.3, 0.7, 1],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Sprite = 
+			{
+				bool Visible = false,
+				bool VisibilityCulling = true,
+				bool VisibilityEvents = false,
+				bool CastShadows = false,
+				Vec4 Color = [1, 0, 0, 1],
+				BlendMode BlendMode = Alpha,
+				SpriteGeometryMode GeometryMode = ZPlane,
+				string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+				string SpriteSource = "5275aa4d802dd6dc:Square",
+				bool RenderMask = false,
+				bool FlipX = false,
+				bool FlipY = false,
+				bool OnTop = false,
+				bool AnimationActive = true,
+				float AnimationSpeed = 1,
+				uint StartFrame = 0,
+			},
+			BoxCollider = 
+			{
+				bool Ghost = true,
+				bool SendsMessages = true,
+				bool Seamless = true,
+				string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+				string SerializedGroupName = "5428897865ae9240:Ghost",
+				Vec3 Offset = [0, 0, 0],
+				Vec3 Size = [0.5, 0.5, 0.5],
+			},
+		},
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 7,
+			},
+			Named = 
+			{
+				string Name = "PlayerRightJA",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [0.214417, 0.0216368, 0],
+				Vec3 Scale = [0.3, 0.7, 1],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Sprite = 
+			{
+				bool Visible = false,
+				bool VisibilityCulling = true,
+				bool VisibilityEvents = false,
+				bool CastShadows = false,
+				Vec4 Color = [1, 0, 0, 1],
+				BlendMode BlendMode = Alpha,
+				SpriteGeometryMode GeometryMode = ZPlane,
+				string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+				string SpriteSource = "5275aa4d802dd6dc:Square",
+				bool RenderMask = false,
+				bool FlipX = false,
+				bool FlipY = false,
+				bool OnTop = false,
+				bool AnimationActive = true,
+				float AnimationSpeed = 1,
+				uint StartFrame = 0,
+			},
+			BoxCollider = 
+			{
+				bool Ghost = true,
+				bool SendsMessages = true,
+				bool Seamless = true,
+				string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+				string SerializedGroupName = "5428897865ae9240:Ghost",
+				Vec3 Offset = [0, 0, 0],
+				Vec3 Size = [0.5, 0.5, 0.5],
+			},
+		},
+	},
+},

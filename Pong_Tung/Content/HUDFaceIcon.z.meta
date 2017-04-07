@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "HUDFaceIcon",
+		uint64 ResourceId = 54e3151f1888cb2f,
+	},
+},

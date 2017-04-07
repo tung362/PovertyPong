@@ -1,0 +1,1076 @@
+class Mode2BallMovement : ZilchComponent
+{
+    //Controller ID
+    [Property]
+    var PlayerIndex : Integer = 0;
+    [Property]
+    var PlayerIndex2 : Integer = 1;
+    // The gamepad that our player is using
+    var Controller:Gamepad = null;
+    var Controller2:Gamepad = null;
+    //Converts to WASD like controls but with controller stick
+    var GamePadUp : Boolean = false;
+    var GamePadDown : Boolean = false;
+    var GamePadUp2 : Boolean = false;
+    var GamePadDown2 : Boolean = false;
+    var VibrateRightPower : Real = 0;
+    var VibrateLeftPower : Real = 0;
+    
+    [Property]
+    var Speed : Real = 10;
+    var Start : Boolean = true;
+    var V : Real3 = Real3(0, 0, 0);
+    var Chance : Integer = 0;
+    var StartX : Real = 0;
+    var StartY : Real = 0;
+    var StartZ : Real = 0;
+    var FirstHit : Boolean = true;
+    var AmountOfHitsNum : Real = 0;
+    
+    var TerrainShake : Boolean = false;
+    var TerrainShakeTimer : Real = 0;
+    var TShakePower : Real = 0;
+    
+    var HitShakeTimer : Real = 0;
+    var HShakePower : Real = 0;
+    
+    var HasMaxedSpeed : Boolean = false;
+    
+    var Bunted : Boolean = false;
+    
+    //Animations
+    [Property]
+    var BallIdle : SpriteSource = null;
+    [Property]
+    var BallHit : SpriteSource = null;
+    [Property]
+    var BallUp : SpriteSource = null;
+    [Property]
+    var BallDown : SpriteSource = null;
+    [Property]
+    var BallLeft : SpriteSource = null;
+    [Property]
+    var BallRight : SpriteSource = null;
+    [Property]
+    var BallDownRight : SpriteSource = null;
+    [Property]
+    var BallDownLeft : SpriteSource = null;
+    [Property]
+    var BallUpRight : SpriteSource = null;
+    [Property]
+    var BallUpLeft : SpriteSource = null;
+    
+    //Collision Group
+    [Property]
+    var GhostGroup : CollisionGroup = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        this.Controller = Zero.Gamepads.GetGamePad(this.PlayerIndex);
+        this.Controller2 = Zero.Gamepads.GetGamePad(this.PlayerIndex2);
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        Zero.Connect(this.Owner, Events.CollisionStarted, this.OnCollisionStarted);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var rand : Random = Random();
+        var deltatime = event.Dt;
+        var tracker  = this.Space.FindObjectByName("Mode2Tracker");
+        var cam  = this.Space.FindObjectByName("Camera");
+        
+        if(this.Controller.IsActive)
+        {
+            //S
+            if((this.Controller.LeftStick.Y < 0 && this.Controller.LeftStick.X > -0.4 && this.Controller.LeftStick.X < 0.4) || this.Controller.IsButtonHeld(Buttons.DpadDownFiltered))
+            {
+                this.GamePadDown = true;
+            }
+            else
+            {
+                this.GamePadDown = false;
+            }
+            
+            //W
+            if((this.Controller.LeftStick.Y > 0 && this.Controller.LeftStick.X > -0.4 && this.Controller.LeftStick.X < 0.4) || this.Controller.IsButtonHeld(Buttons.DpadUpFiltered))
+            {
+                this.GamePadUp = true;
+            }
+            else
+            {
+                this.GamePadUp = false;
+            }
+        }
+        
+        if(this.Controller2.IsActive)
+        {
+            //S
+            if((this.Controller2.LeftStick.Y < 0 && this.Controller2.LeftStick.X > -0.4 && this.Controller2.LeftStick.X < 0.4) || this.Controller2.IsButtonHeld(Buttons.DpadDownFiltered))
+            {
+                this.GamePadDown2 = true;
+            }
+            else
+            {
+                this.GamePadDown2 = false;
+            }
+            
+            //W
+            if((this.Controller2.LeftStick.Y > 0 && this.Controller2.LeftStick.X > -0.4 && this.Controller2.LeftStick.X < 0.4) || this.Controller2.IsButtonHeld(Buttons.DpadUpFiltered))
+            {
+                this.GamePadUp2 = true;
+            }
+            else
+            {
+                this.GamePadUp2 = false;
+            }
+        }
+        
+        if(this.Start == true)
+        {
+            this.Start = false;
+        }
+        
+        //Limit the speed
+        if(this.AmountOfHitsNum * 3.5 >= 2000)
+        {
+            this.HasMaxedSpeed = true;
+        }
+        
+        if(tracker.Mode2Tracker.BallSuperHit == false)
+        {
+            if(this.Bunted == false)
+            {
+                //Animation
+                if(this.StartY == 0 && this.StartX == 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallIdle;
+                }
+                else if(this.StartY > 0 && this.StartX == 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallUp;
+                }
+                else if(this.StartY < 0 && this.StartX == 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallDown;
+                }
+                else if(this.StartY == 0 && this.StartX > 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallRight;
+                }
+                else if(this.StartY == 0 && this.StartX < 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallLeft;
+                }
+                else if(this.StartY > 0 && this.StartX > 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallUpRight;
+                }
+                else if(this.StartY > 0 && this.StartX < 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallUpLeft;
+                }
+                else if(this.StartY < 0 && this.StartX > 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallDownRight;
+                }
+                else if(this.StartY < 0 && this.StartX < 0)
+                {
+                    this.Owner.Sprite.SpriteSource =this.BallDownLeft;
+                }
+                
+                if(this.HasMaxedSpeed == false)
+                {
+                    var speedMod = this.AmountOfHitsNum * 3.5;
+                    this.Owner.RigidBody.Velocity = Real3(0 + this.StartX, 0 + this.StartY, 0 + this.StartZ) * event.Dt * (this.Speed + speedMod);
+                }
+                else
+                {
+                    //this.AmountOfHitsNum = 0;
+                    //Animation
+                    
+                    var speedMod = 2000;
+                    this.Owner.RigidBody.Velocity = Real3(0 + this.StartX, 0 + this.StartY, 0 + this.StartZ) * event.Dt * (this.Speed + speedMod);
+                }
+                
+                //Camera Shake On Terrain
+                if(this.TerrainShake == true)
+                {
+                    this.TerrainShakeTimer += deltatime;
+                    if(this.TShakePower < 1)
+                    {
+                        this.TShakePower = (this.AmountOfHitsNum / 4) * 0.01;
+                    }
+                    else
+                    {
+                        this.TShakePower = 1;
+                    }
+                    
+                    cam.Transform.Translation = Real3(0 + rand.Range(-this.TShakePower, this.TShakePower), 0 + rand.Range(-this.TShakePower, this.TShakePower), 40);
+                    
+                    if(this.TerrainShakeTimer > 0.1)
+                    {
+                        this.TerrainShake = false;
+                        this.TerrainShakeTimer = 0;
+                    }
+                }
+                else
+                {
+                    cam.Transform.Translation = Real3(0, 0, 40);
+                }
+            }
+            else
+            {
+                this.Owner.Sprite.SpriteSource =this.BallIdle;
+                //var speedMod = this.AmountOfHitsNum * 3.5;
+                //this.Owner.RigidBody.Velocity = Real3(0 + this.StartX, 0 + this.StartY, 0 + this.StartZ) * event.Dt * (this.Speed + speedMod);
+            }
+        }
+        else
+        {
+            this.Owner.RigidBody.Velocity = Real3(0, 0, 0);
+            
+            //Animation
+            this.Owner.Sprite.SpriteSource =this.BallHit;
+            
+            //Camera Shake On Hit
+            this.HitShakeTimer += deltatime;
+            
+            if(this.HShakePower < 1)
+            {
+                this.HShakePower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.HShakePower = 1;
+            }
+            
+            //Vibrate
+            if(this.VibrateRightPower < 1)
+            {
+                this.VibrateRightPower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.VibrateRightPower = 1;
+            }
+            
+            if(this.VibrateLeftPower < 1)
+            {
+                this.VibrateLeftPower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.VibrateLeftPower = 1;
+            }
+            
+            if(this.Controller.IsActive)
+            {
+                this.Controller.Vibrate(this.AmountOfHitsNum * 0.005, this.VibrateLeftPower, this.VibrateRightPower);
+            }
+            
+            if(this.Controller2.IsActive)
+            {
+                this.Controller2.Vibrate(this.AmountOfHitsNum * 0.005, this.VibrateLeftPower, this.VibrateRightPower);
+            }
+            //End of vibrate
+            
+            cam.Transform.Translation = Real3(0 + rand.Range(-this.HShakePower, this.HShakePower), 0 + rand.Range(-this.HShakePower, this.HShakePower), 40);
+            
+            if(this.HitShakeTimer > this.AmountOfHitsNum * 0.002)
+            {
+                tracker.Mode2Tracker.BallSuperHit = false;
+                this.HitShakeTimer = 0;
+            }
+        }
+    }
+    
+    function OnCollisionStarted(event : CollisionEvent)
+    {
+        var v = this.Owner.RigidBody.Velocity;
+        var other = event.OtherObject;
+        var cam  = this.Space.FindObjectByName("Camera");
+        var tracker  = this.Space.FindObjectByName("Mode2Tracker");
+        
+        if(other.Name == "RightWall")
+        {
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("Wall2");
+            this.Owner.SoundEmitter.Volume = 0.5;
+            this.Owner.SoundEmitter.Play();
+            
+            this.TerrainShake = true;
+            
+            if(this.VibrateRightPower < 1)
+            {
+                this.VibrateRightPower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.VibrateRightPower = 1;
+            }
+            
+            if(this.Controller.IsActive)
+            {
+                this.Controller.Vibrate(0.1, 0, this.VibrateRightPower);
+            }
+            
+            if(this.Controller2.IsActive)
+            {
+                this.Controller2.Vibrate(0.1, 0, this.VibrateRightPower);
+            }
+            
+            this.StartX = -this.StartX;
+        }
+        
+        else if(other.Name == "LeftWall")
+        {
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("Wall2");
+            this.Owner.SoundEmitter.Volume = 0.5;
+            this.Owner.SoundEmitter.Play();
+            
+            this.TerrainShake = true;
+            
+            if(this.VibrateLeftPower < 1)
+            {
+                this.VibrateLeftPower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.VibrateLeftPower = 1;
+            }
+            
+            if(this.Controller.IsActive)
+            {
+                this.Controller.Vibrate(0.1, this.VibrateLeftPower, 0);
+            }
+            
+            if(this.Controller2.IsActive)
+            {
+                this.Controller2.Vibrate(0.1, this.VibrateLeftPower, 0);
+            }
+            
+            this.StartX = -this.StartX;
+        }
+        
+        else if(other.Name == "TopWall")
+        {
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("Wall2");
+            this.Owner.SoundEmitter.Volume = 0.5;
+            this.Owner.SoundEmitter.Play();
+            
+            this.TerrainShake = true;
+            
+            if(this.VibrateRightPower < 1)
+            {
+                this.VibrateRightPower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.VibrateRightPower = 1;
+            }
+            
+            if(this.VibrateLeftPower < 1)
+            {
+                this.VibrateLeftPower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.VibrateLeftPower = 1;
+            }
+            
+            if(this.Controller.IsActive)
+            {
+                this.Controller.Vibrate(0.1, this.VibrateLeftPower, this.VibrateRightPower);
+            }
+            
+            if(this.Controller2.IsActive)
+            {
+                this.Controller2.Vibrate(0.1, this.VibrateLeftPower, this.VibrateRightPower);
+            }
+            
+            this.StartY = -this.StartY;
+        }
+        
+        else if(other.Name == "BottomWall")
+        {
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("Wall2");
+            this.Owner.SoundEmitter.Volume = 0.5;
+            this.Owner.SoundEmitter.Play();
+            
+            this.TerrainShake = true;
+            
+            if(this.VibrateRightPower < 1)
+            {
+                this.VibrateRightPower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.VibrateRightPower = 1;
+            }
+            
+            if(this.VibrateLeftPower < 1)
+            {
+                this.VibrateLeftPower = (this.AmountOfHitsNum / 4) * 0.01;
+            }
+            else
+            {
+                this.VibrateLeftPower = 1;
+            }
+            
+            if(this.Controller.IsActive)
+            {
+                this.Controller.Vibrate(0.1, this.VibrateLeftPower, this.VibrateRightPower);
+            }
+            
+            if(this.Controller2.IsActive)
+            {
+                this.Controller2.Vibrate(0.1, this.VibrateLeftPower, this.VibrateRightPower);
+            }
+            
+            this.StartY = -this.StartY;
+        }
+        
+        else if(other.Name == "PlayerRightSwing")
+        {
+            //Sound////////////////////////////////////////////////
+            //Needs to check if it's player 1 or player 2 and decides the sound that should be played
+            /*if(other.Parent.TungAnimation.IsPlayer1 == true)
+            {
+                if(this.Space.Global.P1IDNum == 1)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("SedrickHit");
+                    this.Owner.SoundEmitter.Volume = 0.5;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P1IDNum == 2)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("SedrickHit");
+                    this.Owner.SoundEmitter.Volume = 0.5;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P1IDNum == 3)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("SedrickHit");
+                    this.Owner.SoundEmitter.Volume = 0.5;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P1IDNum == 4)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("SedrickHit");
+                    this.Owner.SoundEmitter.Volume = 0.5;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P1IDNum == 5)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("SedrickHit");
+                    this.Owner.SoundEmitter.Volume = 0.5;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P1IDNum == 6)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("SedrickHit");
+                    this.Owner.SoundEmitter.Volume = 0.5;
+                    this.Owner.SoundEmitter.Play();
+                }
+            }
+            else
+            {
+                if(this.Space.Global.P2IDNum == 1)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("TungHit");
+                    this.Owner.SoundEmitter.Volume = 0.2;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P2IDNum == 2)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("AustinHit");
+                    this.Owner.SoundEmitter.Volume = 0.2;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P2IDNum == 3)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("JulioHit");
+                    this.Owner.SoundEmitter.Volume = 0.2;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P2IDNum == 4)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("SedrickHit");
+                    this.Owner.SoundEmitter.Volume = 0.2;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P2IDNum == 5)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("PeytonHit");
+                    this.Owner.SoundEmitter.Volume = 0.2;
+                    this.Owner.SoundEmitter.Play();
+                }
+                else if(this.Space.Global.P2IDNum == 6)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("TreHit");
+                    this.Owner.SoundEmitter.Volume = 0.2;
+                    this.Owner.SoundEmitter.Play();
+                }
+            }*/
+            //End Of Sound//////////////////////////////////////////
+            
+            this.TerrainShake = true;
+            
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("BallHit");
+            this.Owner.SoundEmitter.Volume = 0.2;
+            this.Owner.SoundEmitter.Play();
+            
+            this.Bunted = false;
+            this.Owner.GravityEffect.Direction = Real3(0, 1, 0);
+            this.Owner.DragEffect.Drag = 0;
+            
+            var colParent = other.Parent;
+            
+            if(this.FirstHit == true)
+            {
+                if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                {
+                    this.StartX = 5;
+                    this.StartY = 5;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                {
+                    this.StartX = 5;
+                    this.StartY = -5;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else
+                {
+                    this.StartX = 5;
+                    this.StartY = 0;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                this.AmountOfHitsNum += 1;
+                this.FirstHit = false;
+            }
+            else
+            {
+                this.AmountOfHitsNum += 1;
+                
+                if(this.AmountOfHitsNum * 3.5 > 120)
+                {
+                    tracker.Mode2Tracker.BallSuperHit = true;
+                    
+                    if(this.AmountOfHitsNum * 3.5 > 500)
+                    {
+                        tracker.Mode2Tracker.BlackScreen = true;
+                    }
+                }
+                
+                if(this.StartX < 0)
+                {
+                    this.StartX = -(this.StartX);
+                    //Console.WriteLine(this.Speed);
+                    
+                    if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        this.StartX = 5;
+                        this.StartY = 5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                        //Console.WriteLine("UP");
+                    }
+                    else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        this.StartX = 5;
+                        this.StartY = -5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                        //Console.WriteLine("Down");
+                    }
+                    else
+                    {
+                        this.StartX = 5;
+                        this.StartY = 0;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                        //Console.WriteLine("NONE");
+                    }
+                }
+                else
+                {
+                    this.StartX = this.StartX;
+                    
+                    if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        this.StartX = 5;
+                        this.StartY = 5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        this.StartX = 5;
+                        this.StartY = -5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else
+                    {
+                        this.StartX = 5;
+                        this.StartY = 0;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                }
+            }
+        }
+        
+        else if(other.Name == "PlayerLeftSwing")
+        {
+            this.TerrainShake = true;
+            
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("BallHit");
+            this.Owner.SoundEmitter.Volume = 0.2;
+            this.Owner.SoundEmitter.Play();
+            
+            this.Bunted = false;
+            this.Owner.GravityEffect.Direction = Real3(0, 1, 0);
+            this.Owner.DragEffect.Drag = 0;
+            
+            var colParent = other.Parent;
+            
+            if(this.FirstHit == true)
+            {
+                if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                {
+                    this.StartX = -5;
+                    this.StartY = 5;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                {
+                    this.StartX = -5;
+                    this.StartY = -5;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else
+                {
+                    this.StartX = -5;
+                    this.StartY = 0;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                this.AmountOfHitsNum += 1;
+                this.FirstHit = false;
+            }
+            else
+            {
+                this.AmountOfHitsNum += 1;
+                
+                if(this.AmountOfHitsNum * 3.5 > 120)
+                {
+                    tracker.Mode2Tracker.BallSuperHit = true;
+                    
+                    if(this.AmountOfHitsNum * 3.5 > 500)
+                    {
+                        tracker.Mode2Tracker.BlackScreen = true;
+                    }
+                }
+                
+                if(this.StartX > 0)
+                {
+                    this.StartX = -(this.StartX);
+                    
+                    if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        this.StartX = -5;
+                        this.StartY = 5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        this.StartX = -5;
+                        this.StartY = -5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else
+                    {
+                        this.StartX = -5;
+                        this.StartY = 0;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                }
+                else
+                {
+                    this.StartX = this.StartX;
+                    
+                    if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        this.StartX = -5;
+                        this.StartY = 5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        this.StartX = -5;
+                        this.StartY = -5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else
+                    {
+                        this.StartX = -5;
+                        this.StartY = 0;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                }
+            }
+        }
+        
+        else if(other.Name == "PlayerRightJA")
+        {
+            this.TerrainShake = true;
+            
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("BallHit");
+            this.Owner.SoundEmitter.Volume = 0.2;
+            this.Owner.SoundEmitter.Play();
+            
+            this.Bunted = false;
+            this.Owner.GravityEffect.Direction = Real3(0, 1, 0);
+            this.Owner.DragEffect.Drag = 0;
+            
+            var colParent = other.Parent;
+            
+            if(this.FirstHit == true)
+            {
+                if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                {
+                    this.StartX = 5;
+                    this.StartY = 5;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                {
+                    this.StartX = 5;
+                    this.StartY = -5;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else
+                {
+                    this.StartX = 5;
+                    this.StartY = 0;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                this.AmountOfHitsNum += 1;
+                this.FirstHit = false;
+            }
+            else
+            {
+                this.AmountOfHitsNum += 1;
+                
+                if(this.AmountOfHitsNum * 3.5 > 120)
+                {
+                    tracker.Mode2Tracker.BallSuperHit = true;
+                    
+                    if(this.AmountOfHitsNum * 3.5 > 500)
+                    {
+                        tracker.Mode2Tracker.BlackScreen = true;
+                    }
+                    //Console.WriteLine("ACTIVATED");
+                }
+                
+                if(this.StartX < 0)
+                {
+                    this.StartX = -5;
+                    this.StartX = -(this.StartX);
+                    
+                    if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = 5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = -5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = 0;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                }
+                else
+                {
+                    this.StartX = 5;
+                    this.StartX = this.StartX;
+                    
+                    if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = 5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = -5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = 0;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                }
+            }
+        }
+        
+        else if(other.Name == "PlayerLeftJA")
+        {
+            this.TerrainShake = true;
+            
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("BallHit");
+            this.Owner.SoundEmitter.Volume = 0.2;
+            this.Owner.SoundEmitter.Play();
+            
+            this.Bunted = false;
+            this.Owner.GravityEffect.Direction = Real3(0, 1, 0);
+            this.Owner.DragEffect.Drag = 0;
+            
+            var colParent = other.Parent;
+            
+            if(this.FirstHit == true)
+            {
+                if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                {
+                    this.StartX = -5;
+                    this.StartY = 5;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                {
+                    this.StartX = -5;
+                    this.StartY = -5;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else
+                {
+                    this.StartX = -5;
+                    this.StartY = 0;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                this.AmountOfHitsNum += 1;
+                this.FirstHit = false;
+            }
+            else
+            {
+                this.AmountOfHitsNum += 1;
+                
+                if(this.AmountOfHitsNum * 3.5 > 120)
+                {
+                    tracker.Mode2Tracker.BallSuperHit = true;
+                    
+                    if(this.AmountOfHitsNum * 3.5 > 500)
+                    {
+                        tracker.Mode2Tracker.BlackScreen = true;
+                    }
+                }
+                
+                if(this.StartX > 0)
+                {
+                    this.StartX = 5;
+                    this.StartX = -(this.StartX);
+                    
+                    if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = 5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = -5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = 0;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                }
+                else
+                {
+                    this.StartX = -5;
+                    this.StartX = this.StartX;
+                    
+                    if(((Zero.Keyboard.KeyIsDown(Keys.W) || this.GamePadUp == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.T) || this.GamePadUp2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = 5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else if(((Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true) && colParent.TungAnimation.IsPlayer1 == true) || ((Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown2 == true) && colParent.TungAnimation.IsPlayer1 == false))
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = -5;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                    else
+                    {
+                        if(this.HasMaxedSpeed == false)
+                        {
+                            this.AmountOfHitsNum += (this.AmountOfHitsNum * 0.75);
+                            //Console.WriteLine(this.AmountOfHitsNum * 3.5);
+                        }
+                        
+                        this.StartY = 0;
+                        other.BoxCollider.CollisionGroup = this.GhostGroup;
+                    }
+                }
+            }
+        }
+        
+        else if(other.Name == "PlayerRightBunt")
+        {
+            this.TerrainShake = true;
+            
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("BallHit");
+            this.Owner.SoundEmitter.Volume = 0.2;
+            this.Owner.SoundEmitter.Play();
+            
+            this.Bunted = true;
+            
+            
+            this.Owner.GravityEffect.Direction = Real3(0, -1, 0);
+            this.Owner.DragEffect.Drag = 0.7;
+            
+            if(this.FirstHit == true)
+            {
+                this.Owner.RigidBody.Velocity = Real3(8, 25, 0);
+                this.FirstHit = false;
+            }
+            else
+            {
+                
+                if(this.StartX < 0)
+                {
+                    this.Owner.RigidBody.Velocity += Real3(8, 25, 0);
+                    this.Owner.RigidBody.Velocity.X = -(this.Owner.RigidBody.Velocity.X);
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else
+                {
+                    this.Owner.RigidBody.Velocity += Real3(8, 25, 0);
+                    this.Owner.RigidBody.Velocity.X = this.Owner.RigidBody.Velocity.X;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+            }
+        }
+        
+        else if(other.Name == "PlayerLeftBunt")
+        {
+            this.TerrainShake = true;
+            
+            this.Owner.SoundEmitter.Cue = SoundCue.Find("BallHit");
+            this.Owner.SoundEmitter.Volume = 0.2;
+            this.Owner.SoundEmitter.Play();
+            
+            this.Bunted = true;
+            this.Owner.GravityEffect.Direction = Real3(0, -1, 0);
+            this.Owner.DragEffect.Drag = 0.7;
+            
+            if(this.FirstHit == true)
+            {
+                this.Owner.RigidBody.Velocity = Real3(-8, 25, 0);
+                this.FirstHit = false;
+            }
+            else
+            {
+                
+                if(this.StartX < 0)
+                {
+                    this.Owner.RigidBody.Velocity += Real3(-8, 25, 0);
+                    this.Owner.RigidBody.Velocity.X = -(this.Owner.RigidBody.Velocity.X);
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+                else
+                {
+                    this.Owner.RigidBody.Velocity += Real3(-8, 25, 0);
+                    this.Owner.RigidBody.Velocity.X = this.Owner.RigidBody.Velocity.X;
+                    other.BoxCollider.CollisionGroup = this.GhostGroup;
+                }
+            }
+        }
+        
+        else if(other.Name == "Player1BadBox")
+        {
+            this.Space.Global.P2Mode2Score += 1;
+            cam.Transform.Translation = Real3(0, 0, 40);
+            var objectPos = other.Transform.Translation;
+            var objectHit: Archetype = Archetype.Find("ObjectHit");
+            var spawnedObject = this.Space.CreateAtPosition(objectHit ,Real3(objectPos.X, objectPos.Y, 1.6));
+            this.Owner.Destroy();
+        }
+        
+        else if(other.Name == "Player2BadBox")
+        {
+            this.Space.Global.P1Mode2Score += 1;
+            //Console.WriteLine(this.Space.Global.P1Mode2Score);
+            cam.Transform.Translation = Real3(0, 0, 40);
+            var objectPos = other.Transform.Translation;
+            var objectHit: Archetype = Archetype.Find("ObjectHit");
+            var spawnedObject = this.Space.CreateAtPosition(objectHit ,Real3(objectPos.X, objectPos.Y, 1.6));
+            this.Owner.Destroy();
+        }
+    }
+}

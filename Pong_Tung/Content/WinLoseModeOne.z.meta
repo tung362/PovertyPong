@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "WinLoseModeOne",
+		uint64 ResourceId = 5436c57cf2debac0,
+	},
+},

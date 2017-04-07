@@ -1,0 +1,24 @@
+class PrologueTracker : ZilchComponent
+{
+    [Property]
+    var CanPlay : Boolean = false;
+    
+    var Dialog1 : Boolean = true;
+    var Dialog2 : Boolean = false;
+    var Dialog3 : Boolean = false;
+    var Dialog4 : Boolean = false;
+    var Dialog5 : Boolean = false;
+    var Dialog6 : Boolean = false;
+    
+    [Property]
+    var FinishedDialog : Boolean = false;
+    
+    function Initialize(init : CogInitializer)
+    {
+        //Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+    }
+}

@@ -1,0 +1,81 @@
+class TheMainMenu : ZilchComponent
+{
+    var Start : Boolean = true;
+    var Start2 : Boolean = true;
+    var CanInteract : Boolean = true;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var prologue = this.Space.FindObjectByName("PrologueTracker");
+        var backGround = this.Owner.FindChildByName("MainMenuBG");
+        var bg = this.Owner.FindChildByName("BG");
+        var play = this.Owner.FindChildByName("PlayText");
+        var play2 = this.Owner.FindChildByName("Play2Text");
+        var instructions = this.Owner.FindChildByName("InstructionsText");
+        var about = this.Owner.FindChildByName("AboutText");
+        var exit = this.Owner.FindChildByName("ExitText");
+        var story = this.Owner.FindChildByName("StoryText");
+        
+        var playsymbol = this.Owner.FindChildByName("PlaySymbol");
+        var play2symbol = this.Owner.FindChildByName("Play2Symbol");
+        var instructionssymbol = this.Owner.FindChildByName("InstructionsSymbol");
+        var aboutsymbol = this.Owner.FindChildByName("AboutSymbol");
+        var exitsymbol = this.Owner.FindChildByName("ExitSymbol");
+        
+        if(prologue.PrologueTracker.CanPlay == true)
+        {
+            if(this.Start == true)
+            {
+                backGround.Sprite.Visible = false;
+                bg.Sprite.Visible = false;
+                
+                play.SpriteText.Visible = false;
+                play2.SpriteText.Visible = false;
+                instructions.SpriteText.Visible = false;
+                about.SpriteText.Visible = false;
+                exit.SpriteText.Visible = false;
+                story.SpriteText.Visible = false;
+                
+                playsymbol.Sprite.Visible = false;
+                play2symbol.Sprite.Visible = false;
+                instructionssymbol.Sprite.Visible = false;
+                aboutsymbol.Sprite.Visible = false;
+                exitsymbol.Sprite.Visible = false;
+                
+                this.CanInteract = false;
+                this.Start2 = true;
+                this.Start = false;
+            }
+        }
+        else
+        {
+            if(this.Start2 == true)
+            {
+                backGround.Sprite.Visible = true;
+                bg.Sprite.Visible = true;
+                
+                play.SpriteText.Visible = true;
+                play2.SpriteText.Visible = true;
+                instructions.SpriteText.Visible = true;
+                about.SpriteText.Visible = true;
+                exit.SpriteText.Visible = true;
+                story.SpriteText.Visible = true;
+                
+                playsymbol.Sprite.Visible = true;
+                play2symbol.Sprite.Visible = true;
+                instructionssymbol.Sprite.Visible = true;
+                aboutsymbol.Sprite.Visible = true;
+                exitsymbol.Sprite.Visible = true;
+                
+                this.CanInteract = true;
+                this.Start = true;
+                this.Start2 = false;
+            }
+        }
+    }
+}

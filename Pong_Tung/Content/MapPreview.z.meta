@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "MapPreview",
+		uint64 ResourceId = 542b2e21b51552f9,
+	},
+},

@@ -1,0 +1,20 @@
+ImageContent = 
+{
+	SpriteSourceBuilder = 
+	{
+		string Name = "RightArrow",
+		uint64 ResourceId = 542b2f2df2d29857,
+		uint64 AtlasId = 5274cf95e4a661fd,
+		uint FrameSizeX = 21,
+		uint FrameSizeY = 22,
+		uint FrameCount = 1,
+		float FrameDelay = 0.0833333,
+		float OriginX = 10,
+		float OriginY = 11,
+		float PixelsPerUnit = 64,
+		bool Smoothing = false,
+		bool Looping = true,
+		Vec4 Slices = [0, 0, 0, 0],
+		SpriteFill Fill = Stretch,
+	},
+},

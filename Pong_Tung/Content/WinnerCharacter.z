@@ -1,0 +1,89 @@
+class WinnerCharacter : ZilchComponent
+{
+    [Property]
+    var Tung : SpriteSource = null;
+    [Property]
+    var Austin : SpriteSource = null;
+    [Property]
+    var Julio : SpriteSource = null;
+    [Property]
+    var Sedrick : SpriteSource = null;
+    [Property]
+    var Peyton : SpriteSource = null;
+    [Property]
+    var Tre : SpriteSource = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.Space.Global.P1Mode2Score >= 5)
+        {
+            //1 = Tung, 2 = Austin, 3 = Julio, 4 = Sedrick, 5 = Peyton, 6 = Tre
+            if(this.Space.Global.P1IDNum == 1)
+            {
+                this.Owner.Sprite.SpriteSource = this.Tung;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 2)
+            {
+                this.Owner.Sprite.SpriteSource = this.Austin;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 3)
+            {
+                this.Owner.Sprite.SpriteSource = this.Julio;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 4)
+            {
+                this.Owner.Sprite.SpriteSource = this.Sedrick;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 5)
+            {
+                this.Owner.Sprite.SpriteSource = this.Peyton;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 6)
+            {
+                this.Owner.Sprite.SpriteSource = this.Tre;
+            }
+        }
+        else
+        {
+            if(this.Space.Global.P2IDNum == 1)
+            {
+                this.Owner.Sprite.SpriteSource = this.Tung;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 2)
+            {
+                this.Owner.Sprite.SpriteSource = this.Austin;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 3)
+            {
+                this.Owner.Sprite.SpriteSource = this.Julio;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 4)
+            {
+                this.Owner.Sprite.SpriteSource = this.Sedrick;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 5)
+            {
+                this.Owner.Sprite.SpriteSource = this.Peyton;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 6)
+            {
+                this.Owner.Sprite.SpriteSource = this.Tre;
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+Cog = 
+{
+	LinkId = 
+	{
+		uint Id = 1,
+	},
+	Named = 
+	{
+		string Name = "StageMusic",
+	},
+	Archetyped = 
+	{
+		string Name = "55972461f5cec363:StageMusic",
+	},
+	Transform = 
+	{
+		Vec3 Translation = [-0.706164, -6.30189, 0],
+		Vec3 Scale = [1, 1, 1],
+		Quat Rotation = [0, 0, 0, 1],
+	},
+	SoundEmitter = 
+	{
+		bool StartPlaying = true,
+		int ExtraPriority = 0,
+		string CueName = "5596676b6c3cbc27:Stage1",
+		float Volume = 1,
+		float Pitch = 1,
+		bool Positional = false,
+	},
+},

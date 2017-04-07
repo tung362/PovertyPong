@@ -1,0 +1,36 @@
+class SuperHitBG2 : ZilchComponent
+{
+    var Start : Boolean = true;
+    var Start2 : Boolean = true;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var tracker = this.Space.FindObjectByName("Mode2Tracker");
+        
+        if(tracker.Mode2Tracker.BallSuperHit == true && tracker.Mode2Tracker.BlackScreen == true)
+        {
+            if(this.Start == true)
+            {
+                this.Owner.Model.Visible = true;
+                
+                this.Start2 = true;
+                this.Start = false;
+            }
+        }
+        else
+        {
+            if(this.Start2 == true)
+            {
+                this.Owner.Model.Visible = false;
+                
+                this.Start = true;
+                this.Start2 = false;
+            }
+        }
+    }
+}

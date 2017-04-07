@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "Mode2Tracker",
+		uint64 ResourceId = 54e4f7898c62123e,
+	},
+},

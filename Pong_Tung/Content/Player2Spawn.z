@@ -1,0 +1,90 @@
+class Player2Spawn : ZilchComponent
+{
+    var Spawn : Boolean = true;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.Spawn == true)
+        {
+            //1 = Tung, 2 = Austin, 3 = Julio, 4 = Sedrick, 5 = Peyton, 6 = Tre
+            if(this.Space.Global.P2IDNum == 1)
+            {
+                var thePlayer : Archetype = Archetype.Find("Mode2Tung");
+                var pos = this.Owner.Transform.Translation;
+                var player = this.Space.CreateAtPosition(thePlayer, Real3(pos.X, pos.Y, 1.5));
+                player.TungController.IsPlayer1 = false;
+                player.TungAnimation.IsPlayer1 = false;
+                player.TungController.PlayerIndex = 1;
+                player.TungAnimation.PlayerIndex = 1;
+                player.Sprite.FlipX = true;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 2)
+            {
+                var thePlayer : Archetype = Archetype.Find("Mode2Austin");
+                var pos = this.Owner.Transform.Translation;
+                var player = this.Space.CreateAtPosition(thePlayer, Real3(pos.X, pos.Y, 1.5));
+                player.TungController.IsPlayer1 = false;
+                player.TungAnimation.IsPlayer1 = false;
+                player.TungController.PlayerIndex = 1;
+                player.TungAnimation.PlayerIndex = 1;
+                player.Sprite.FlipX = true;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 3)
+            {
+                var thePlayer : Archetype = Archetype.Find("Mode2Julio");
+                var pos = this.Owner.Transform.Translation;
+                var player = this.Space.CreateAtPosition(thePlayer, Real3(pos.X, pos.Y, 1.5));
+                player.TungController.IsPlayer1 = false;
+                player.TungAnimation.IsPlayer1 = false;
+                player.TungController.PlayerIndex = 1;
+                player.TungAnimation.PlayerIndex = 1;
+                player.Sprite.FlipX = true;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 4)
+            {
+                var thePlayer : Archetype = Archetype.Find("Mode2Sedrick");
+                var pos = this.Owner.Transform.Translation;
+                var player = this.Space.CreateAtPosition(thePlayer, Real3(pos.X, pos.Y, 1.5));
+                player.TungController.IsPlayer1 = false;
+                player.TungAnimation.IsPlayer1 = false;
+                player.TungController.PlayerIndex = 1;
+                player.TungAnimation.PlayerIndex = 1;
+                player.Sprite.FlipX = true;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 5)
+            {
+                var thePlayer : Archetype = Archetype.Find("Mode2Peyton");
+                var pos = this.Owner.Transform.Translation;
+                var player = this.Space.CreateAtPosition(thePlayer, Real3(pos.X, pos.Y, 1.5));
+                player.TungController.IsPlayer1 = false;
+                player.TungAnimation.IsPlayer1 = false;
+                player.TungController.PlayerIndex = 1;
+                player.TungAnimation.PlayerIndex = 1;
+                player.Sprite.FlipX = true;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 6)
+            {
+                var thePlayer : Archetype = Archetype.Find("Mode2Tre");
+                var pos = this.Owner.Transform.Translation;
+                var player = this.Space.CreateAtPosition(thePlayer, Real3(pos.X, pos.Y, 1.5));
+                player.TungController.IsPlayer1 = false;
+                player.TungAnimation.IsPlayer1 = false;
+                player.TungController.PlayerIndex = 1;
+                player.TungAnimation.PlayerIndex = 1;
+                player.Sprite.FlipX = true;
+            }
+            
+            this.Spawn = false;
+        }
+    }
+}

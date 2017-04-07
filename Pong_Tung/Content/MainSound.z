@@ -1,0 +1,38 @@
+class MainSound : ZilchComponent
+{
+    var BackgroundMusicObject : Cog = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        
+        this.BackgroundMusicObject = this.Space.FindObjectByName("BackgroundMusic");
+        // If the there is background music
+        if(this.BackgroundMusicObject != null)
+        {
+            this.BackgroundMusicObject.SoundEmitter.Play();
+            this.BackgroundMusicObject.Persistent = true;
+        }
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        //Pause
+        /*if (Zero.Keyboard.KeyIsPressed(Keys.Space))
+        {
+            this.Space.SoundSpace.Pause = !this.Space.SoundSpace.Pause;
+        }
+        
+        //Play
+        if (Zero.Keyboard.KeyIsPressed(Keys.T) && this.BackgroundMusicObject != null)
+        {
+            this.BackgroundMusicObject.SoundEmitter.Play();
+        }
+        
+        //Reload
+        if (Zero.Keyboard.KeyIsPressed(Keys.R))
+        {
+            this.Space.ReloadLevel();
+        }*/
+    }
+}

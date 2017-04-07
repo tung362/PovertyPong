@@ -1,0 +1,94 @@
+class BlackFlash : ZilchComponent
+{
+    var Timer : Real = 0;
+    [Property]
+    var Delay : Real = 5;
+    
+    var Rand : Random = Random();
+    var Chance : Integer = 1;
+    
+    [Property]
+    var ToLevel : Level = null;
+    [Property]
+    var ToLevel2 : Level = null;
+    [Property]
+    var ToLevel3 : Level = null;
+    [Property]
+    var ToLevel4 : Level = null;
+    [Property]
+    var ToLevel5 : Level = null;
+    [Property]
+    var ToLevel6 : Level = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        
+        if(this.Space.Global.MapIDNum == 1)
+        {
+            this.Chance = this.Rand.DieRoll(2);
+        }
+        else if (this.Space.Global.MapIDNum == 2)
+        {
+            this.Chance = this.Rand.DieRoll(3);
+        }
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var deltatime = event.Dt;
+        this.Timer += deltatime;
+        
+        var objectColor = this.Owner.Sprite.Color;
+        
+        if(this.Timer > this.Delay)
+        {
+            //X = R
+            //Y = G
+            //Z = B
+            //W = A
+            if(objectColor.W < 0.98)
+            {
+                this.Owner.Sprite.Color += Real4(0, 0, 0, 0.5) * event.Dt;
+            }
+            
+            if(objectColor.W >= 0.98)
+            {
+                this.Owner.Sprite.Color = Real4(0, 0, 0, 1);
+                if(this.Space.Global.MapIDNum == 1)
+                {
+                    if(this.Chance == 1)
+                    {
+                        this.Space.LoadLevel(this.ToLevel);
+                    }
+                    else if(this.Chance == 2)
+                    {
+                        this.Space.LoadLevel(this.ToLevel3);
+                    }
+                }
+                else if(this.Space.Global.MapIDNum == 2)
+                {
+                    if(this.Chance == 1)
+                    {
+                        this.Space.LoadLevel(this.ToLevel2);
+                    }
+                    else if(this.Chance == 2)
+                    {
+                        this.Space.LoadLevel(this.ToLevel5);
+                    }
+                    else if(this.Chance == 3)
+                    {
+                        this.Space.LoadLevel(this.ToLevel6);
+                    }
+                }
+                else if(this.Space.Global.MapIDNum == 3)
+                {
+                    this.Space.LoadLevel(this.ToLevel4);
+                }
+                
+                this.Timer = 0;
+                //Load level
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+class SplashScreen : ZilchComponent
+{
+    var Timer : Real = 0;
+    [Property]
+    var Delay : Real = 7.0;
+    
+    [Property]
+    var MainMenu : Level = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var deltaTime = event.Dt;
+        
+        this.Timer += deltaTime;
+        
+        if(this.Timer > this.Delay)
+        {
+            this.Space.LoadLevel(this.MainMenu);
+        }
+    }
+}

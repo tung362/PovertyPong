@@ -1,0 +1,173 @@
+Cog = 
+{
+	LinkId = 
+	{
+		uint Id = 1,
+	},
+	Named = 
+	{
+		string Name = "Mode2Ball",
+	},
+	Archetyped = 
+	{
+		string Name = "54276f7da441e44e:Mode2Ball",
+	},
+	Transform = 
+	{
+		Vec3 Translation = [0, -6.17582, 1.5],
+		Vec3 Scale = [3, 3, 1],
+		Quat Rotation = [0, 0, 0, 1],
+	},
+	Sprite = 
+	{
+		bool Visible = true,
+		bool VisibilityCulling = true,
+		bool VisibilityEvents = false,
+		bool CastShadows = false,
+		Vec4 Color = [1, 1, 1, 1],
+		BlendMode BlendMode = Alpha,
+		SpriteGeometryMode GeometryMode = ZPlane,
+		string SpriteLayer = "52ad5fa30d7fcd50:DefaultSpriteLayer",
+		string SpriteSource = "54e6907615fd18d3:BallIdle",
+		bool RenderMask = false,
+		bool FlipX = false,
+		bool FlipY = false,
+		bool OnTop = false,
+		bool AnimationActive = true,
+		float AnimationSpeed = 1,
+		uint StartFrame = 0,
+	},
+	RigidBody = 
+	{
+		bool Static = false,
+		bool Asleep = false,
+		bool Kinematic = false,
+		bool RotationLocked = true,
+		bool Mode2D = false,
+		bool AllowSleep = false,
+		bool Inherit2DMode = true,
+		Vec3 Velocity = [0, 0, 0],
+		Vec3 AngularVelocity = [0, 0, 0],
+	},
+	SphereCollider = 
+	{
+		bool Ghost = false,
+		bool SendsMessages = true,
+		bool Seamless = true,
+		string MaterialName = "4de020863e872da8:DefaultPhysicsMaterial",
+		string SerializedGroupName = "543c5d08b861305e:Ball",
+		Vec3 Offset = [0, 0, 0],
+		float Radius = 0.25,
+	},
+	DragEffect = 
+	{
+		bool Active = true,
+		bool WakeUpOnChange = true,
+		float Drag = 0,
+	},
+	GravityEffect = 
+	{
+		bool Active = true,
+		bool WakeUpOnChange = true,
+		bool LocalSpaceDirection = false,
+		float Strength = 10,
+		Vec3 Direction = [0, 1, 0],
+	},
+	Mode2BallMovement = 
+	{
+		int PlayerIndex = 0,
+		int PlayerIndex2 = 1,
+		float Speed = 100,
+		string BallIdle = "54e6907615fd18d3:BallIdle",
+		string BallHit = "54e6908d166a3dad:BallHit",
+		string BallUp = "54e6906f6f2bba68:BallUp",
+		string BallDown = "54e6909f1a7d0006:BallDown",
+		string BallLeft = "54e69070136712eb:BallLeft",
+		string BallRight = "54e6906711777e9b:BallRight",
+		string BallDownRight = "54e6908317139fef:BallDownRight",
+		string BallDownLeft = "54e6909a19adc789:BallDownLeft",
+		string BallUpRight = "54e690526dfc732f:BallUpRight",
+		string BallUpLeft = "54e690686ea4bcce:BallUpLeft",
+		string GhostGroup = "5428897865ae9240:Ghost",
+	},
+	DestroyOffScreen = 
+	{
+	},
+	DontGoThroughWalls = 
+	{
+	},
+	SoundEmitter = 
+	{
+		bool StartPlaying = false,
+		int ExtraPriority = 0,
+		string CueName = "5584eab92a9eb944:Wall2",
+		float Volume = 1,
+		float Pitch = 1,
+		bool Positional = true,
+	},
+	Hierarchy = 
+	{
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 2,
+			},
+			Named = 
+			{
+				string Name = "Cube",
+			},
+			EditorFlags = 
+			{
+				bool Locked = false,
+				bool Hidden = true,
+			},
+			Transform = 
+			{
+				Vec3 Translation = [0, 0, -1],
+				Vec3 Scale = [25, 25, 1],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Model = 
+			{
+				bool Visible = false,
+				bool VisibilityCulling = true,
+				bool VisibilityEvents = false,
+				bool CastShadows = true,
+				string MaterialName = "558218d621e48c42:InnerCircleMaterial",
+				string MeshName = "4de0354322b345ae:Cube",
+				Vec4 Color = [1, 1, 1, 1],
+			},
+			SuperHitBG2 = 
+			{
+			},
+		},
+		Cog = 
+		{
+			LinkId = 
+			{
+				uint Id = 3,
+			},
+			Named = 
+			{
+				string Name = "Shine",
+			},
+			Transform = 
+			{
+				Vec3 Translation = [-0.0209374, 0, 0.002],
+				Vec3 Scale = [4, 4, 1],
+				Quat Rotation = [0, 0, 0, 1],
+			},
+			Model = 
+			{
+				bool Visible = true,
+				bool VisibilityCulling = true,
+				bool VisibilityEvents = false,
+				bool CastShadows = true,
+				string MaterialName = "5509f00f2ba58c84:Shine",
+				string MeshName = "4de0354322b345ae:Cube",
+				Vec4 Color = [1, 1, 1, 1],
+			},
+		},
+	},
+},

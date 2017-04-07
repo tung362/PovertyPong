@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "HourGlass",
+		uint64 ResourceId = 542b6243d490f126,
+	},
+},

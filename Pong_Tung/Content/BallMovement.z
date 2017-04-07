@@ -1,0 +1,134 @@
+class BallMovement : ZilchComponent
+{
+    [Property]
+    var Speed : Real = 10;
+    var Start : Boolean = true;
+    var V : Real3 = Real3(0, 0, 0);
+    var Chance : Integer = 0;
+    var StartX : Real = 0;
+    var StartY : Real = 0;
+    var StartZ : Real = 0;
+    var ZBaseSpeed : Real = 0;
+    var ZActualSpeed : Real = 0;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        Zero.Connect(this.Owner, Events.CollisionStarted, this.OnCollisionStarted);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var rand : Random = Random();
+        
+        if(this.Start == true)
+        {
+            this.Chance = rand.DieRoll(2);
+            
+            if(this.Chance == 1)
+            {
+                this.StartZ = rand.Range(0, 0.5);
+                this.ZBaseSpeed = 0.6;
+                this.ZActualSpeed = this.StartZ + this.ZBaseSpeed;
+            }
+            
+            else if(this.Chance == 2)
+            {
+                this.StartZ = rand.Range(0, -0.5);
+                this.ZBaseSpeed = -0.6;
+                this.ZActualSpeed = this.StartZ + this.ZBaseSpeed;
+            }
+            
+            this.StartX = rand.Range(-1, 1);
+            this.StartY = rand.Range(-1, 1);
+            //this.StartZ = rand.Range(-1, 1);
+            
+            //this.Owner.RigidBody.Velocity += Real3(0 + this.RandStartX, 0 + this.RandStartY, 0 + this.RandStartZ) * event.Dt * this.Speed;
+            this.Start = false;
+        }
+        
+        this.Owner.RigidBody.Velocity = Real3(0 + this.StartX, 0 + this.StartY, this.ZActualSpeed) * event.Dt * this.Speed;
+    }
+    
+    function OnCollisionStarted(event : CollisionEvent)
+    {
+        var v = this.Owner.RigidBody.Velocity;
+        var other = event.OtherObject;
+        
+        if(other.Name == "WallRight")
+        {
+            this.StartX = -this.StartX;
+            
+            var contactPoint = event.FirstPoint.WorldPoint;
+            var objectHit: Archetype = Archetype.Find("ObjectHit");
+            var spawnedobject = this.Space.CreateAtPosition(objectHit, Real3(contactPoint.X, contactPoint.Y, contactPoint.Z));
+            spawnedobject.Transform.Rotation = other.Transform.Rotation;
+        }
+        
+        else if(other.Name == "WallLeft")
+        {
+            this.StartX = -this.StartX;
+            
+            var contactPoint = event.FirstPoint.WorldPoint;
+            var objectHit: Archetype = Archetype.Find("ObjectHit");
+            var spawnedobject = this.Space.CreateAtPosition(objectHit, Real3(contactPoint.X, contactPoint.Y, contactPoint.Z));
+            spawnedobject.Transform.Rotation = other.Transform.Rotation;
+        }
+        
+        else if(other.Name == "WallTop")
+        {
+            this.StartY = -this.StartY;
+            
+            var contactPoint = event.FirstPoint.WorldPoint;
+            var objectHit: Archetype = Archetype.Find("ObjectHit");
+            var spawnedobject = this.Space.CreateAtPosition(objectHit, Real3(contactPoint.X, contactPoint.Y, contactPoint.Z));
+            spawnedobject.Transform.Rotation = other.Transform.Rotation;
+        }
+        
+        else if(other.Name == "WallBottom")
+        {
+            this.StartY = -this.StartY;
+            
+            var contactPoint = event.FirstPoint.WorldPoint;
+            var objectHit: Archetype = Archetype.Find("ObjectHit");
+            var spawnedobject = this.Space.CreateAtPosition(objectHit, Real3(contactPoint.X, contactPoint.Y, contactPoint.Z));
+            spawnedobject.Transform.Rotation = other.Transform.Rotation;
+        }
+        
+        else if(other.Name == "Player1")
+        {
+            var modZ = this.ZActualSpeed * 0.1;
+            this.ZActualSpeed = -(this.ZActualSpeed + modZ);
+            
+            var contactPoint = event.FirstPoint.WorldPoint;
+            var objectHit: Archetype = Archetype.Find("ObjectHit");
+            var spawnedobject = this.Space.CreateAtPosition(objectHit, Real3(contactPoint.X, contactPoint.Y, contactPoint.Z));
+            spawnedobject.Transform.Rotation = other.Transform.Rotation;
+            //Console.WriteLine(this.ZActualSpeed);
+        }
+        
+        else if(other.Name == "Player2")
+        {
+            var modZ = this.ZActualSpeed * 0.1;
+            this.ZActualSpeed = -(this.ZActualSpeed + modZ);
+            
+            var contactPoint = event.FirstPoint.WorldPoint;
+            var objectHit: Archetype = Archetype.Find("ObjectHit");
+            var spawnedobject = this.Space.CreateAtPosition(objectHit, Real3(contactPoint.X, contactPoint.Y, contactPoint.Z));
+            spawnedobject.Transform.Rotation = other.Transform.Rotation;
+            //Console.WriteLine(this.ZActualSpeed);
+        }
+        
+        else if(other.Name == "Player1BadBox")
+        {
+            this.Space.Global.P2Score += 1;
+            this.Owner.Destroy();
+        }
+        
+        else if(other.Name == "Player2BadBox")
+        {
+            this.Space.Global.P1Score += 1;
+            this.Owner.Destroy();
+        }
+    }
+}

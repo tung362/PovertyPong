@@ -1,0 +1,35 @@
+class P2Tre : ZilchComponent
+{
+    var Start : Boolean = true;
+    var Start2 : Boolean = true;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        //1 = Tung, 2 = Austin, 3 = Julio, 4 = Sedrick, 5 = Peyton, 6 = Tre
+        if(this.Space.Global.P2IDNum == 6)
+        {
+            if(this.Start == true)
+            {
+                this.Owner.Sprite.Visible = true;
+                
+                this.Start2 = true;
+                this.Start = false;
+            }
+        }
+        else
+        {
+            if(this.Start2 == true)
+            {
+                this.Owner.Sprite.Visible = false;
+                
+                this.Start = true;
+                this.Start2 = false;
+            }
+        }
+    }
+}

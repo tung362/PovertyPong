@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchFragmentBuilder = 
+	{
+		string Name = "InnerCircleShader",
+		uint64 ResourceId = 558218c65d7e02c5,
+	},
+},

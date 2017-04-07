@@ -1,0 +1,34 @@
+class WhiteFlash : ZilchComponent
+{
+    [Property]
+    var ToLevel : Level = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var prologue = this.Space.FindObjectByName("PrologueTracker");
+        var objectColor = this.Owner.Sprite.Color;
+        
+        if(prologue.PrologueTracker.FinishedDialog == true)
+        {
+            //X = R
+            //Y = G
+            //Z = B
+            //W = A
+            if(objectColor.W < 0.98)
+            {
+                this.Owner.Sprite.Color += Real4(0, 0, 0, 0.5) * event.Dt;
+            }
+            
+            if(objectColor.W >= 0.98)
+            {
+                this.Owner.Sprite.Color = Real4(1, 1, 1, 1);
+                this.Space.LoadLevel(this.ToLevel);
+            }
+        }
+    }
+}

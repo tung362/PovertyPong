@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "LeftArrow",
+		uint64 ResourceId = 542b2dd770806f98,
+	},
+},

@@ -1,0 +1,16 @@
+class HourGlass : ZilchComponent
+{
+    var SpinSpeed : Real = 10;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var rotationangles = Real3(0, 0, 0);
+        rotationangles.Y += Math.ToRadians(-100);
+        this.Owner.Transform.RotateAnglesLocal(rotationangles * event.Dt);
+    }
+}

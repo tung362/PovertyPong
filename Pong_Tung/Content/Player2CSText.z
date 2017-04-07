@@ -1,0 +1,41 @@
+class Player2CSText : ZilchComponent
+{
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        //1 = Tung, 2 = Austin, 3 = Julio, 4 = Sedrick, 5 = Peyton, 6 = Tre
+        if(this.Space.Global.P2IDNum == 1)
+        {
+            this.Owner.SpriteText.Text = "Tung";
+        }
+        
+        else if(this.Space.Global.P2IDNum == 2)
+        {
+            this.Owner.SpriteText.Text = "Austin";
+        }
+        
+        else if(this.Space.Global.P2IDNum == 3)
+        {
+            this.Owner.SpriteText.Text = "Julio";
+        }
+        
+        else if(this.Space.Global.P2IDNum == 4)
+        {
+            this.Owner.SpriteText.Text = "Sedrick";
+        }
+        
+        else if(this.Space.Global.P2IDNum == 5)
+        {
+            this.Owner.SpriteText.Text = "Peyton";
+        }
+        
+        else if(this.Space.Global.P2IDNum == 6)
+        {
+            this.Owner.SpriteText.Text = "Tre";
+        }
+    }
+}

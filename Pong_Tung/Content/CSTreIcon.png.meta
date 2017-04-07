@@ -1,0 +1,20 @@
+ImageContent = 
+{
+	SpriteSourceBuilder = 
+	{
+		string Name = "CSTreIcon",
+		uint64 ResourceId = 542b7afb604ef22c,
+		uint64 AtlasId = 5274cf95e4a661fd,
+		uint FrameSizeX = 14,
+		uint FrameSizeY = 21,
+		uint FrameCount = 1,
+		float FrameDelay = 0.0833333,
+		float OriginX = 7,
+		float OriginY = 10,
+		float PixelsPerUnit = 64,
+		bool Smoothing = false,
+		bool Looping = true,
+		Vec4 Slices = [0, 0, 0, 0],
+		SpriteFill Fill = Stretch,
+	},
+},

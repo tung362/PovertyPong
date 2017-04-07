@@ -1,0 +1,20 @@
+ImageContent = 
+{
+	SpriteSourceBuilder = 
+	{
+		string Name = "SedrickBodyWalk",
+		uint64 ResourceId = 54e3fd03a63339b6,
+		uint64 AtlasId = 5274cf95e4a661fd,
+		uint FrameSizeX = 120,
+		uint FrameSizeY = 120,
+		uint FrameCount = 6,
+		float FrameDelay = 0.0833333,
+		float OriginX = 60,
+		float OriginY = 60,
+		float PixelsPerUnit = 64,
+		bool Smoothing = false,
+		bool Looping = true,
+		Vec4 Slices = [0, 0, 0, 0],
+		SpriteFill Fill = Stretch,
+	},
+},

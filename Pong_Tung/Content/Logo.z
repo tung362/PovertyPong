@@ -1,0 +1,26 @@
+class Logo : ZilchComponent
+{
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var objectColor = this.Owner.Sprite.Color;
+        //X = R
+        //Y = G
+        //Z = B
+        //W = A
+        if(objectColor.W < 0.98)
+        {
+            this.Owner.Sprite.Color += Real4(0, 0, 0, 0.3) * event.Dt;
+        }
+        
+        if(objectColor.W >= 0.98)
+        {
+            this.Owner.Sprite.Color = Real4(1, 1, 1, 1);
+            //Load level
+        }
+    }
+}

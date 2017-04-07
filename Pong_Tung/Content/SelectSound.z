@@ -1,0 +1,91 @@
+class SelectSound : ZilchComponent
+{
+    var CanPlaySound : Boolean = true;
+    var BackGroundIsSilent : Boolean = false;
+    var StageIsSilent : Boolean = false;
+    
+    [Property]
+    var MusicToSpawn : Archetype = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var backgroundMusicObject = this.Space.FindObjectByName("BackgroundMusic");
+        var selectMusicObject = this.Space.FindObjectByName("SelectMusic");
+        var stageMusicObject = this.Space.FindObjectByName("StageMusic");
+        
+        //End Sound
+        if(backgroundMusicObject != null)
+        {
+            if(backgroundMusicObject.SoundEmitter.Volume >= 0.02)
+            {
+                backgroundMusicObject.SoundEmitter.Volume -= 0.01; //Speed
+            }
+            
+            if(backgroundMusicObject.SoundEmitter.Volume <= 0.02)
+            {
+                backgroundMusicObject.SoundEmitter.Volume = 0;
+                this.BackGroundIsSilent = true;
+                //Load level
+            }
+        }
+        else
+        {
+            this.BackGroundIsSilent = true;
+        }
+        
+        //End Sound
+        if(stageMusicObject != null)
+        {
+            if(stageMusicObject.SoundEmitter.Volume >= 0.02)
+            {
+                stageMusicObject.SoundEmitter.Volume -= 0.01; //Speed
+            }
+            
+            if(stageMusicObject.SoundEmitter.Volume <= 0.02)
+            {
+                stageMusicObject.SoundEmitter.Volume = 0;
+                this.StageIsSilent = true;
+                //Load level
+            }
+        }
+        else
+        {
+            this.StageIsSilent = true;
+        }
+        
+        //Start Sound
+        if(selectMusicObject != null)
+        {
+            if(this.BackGroundIsSilent == true)
+            {
+                if(selectMusicObject.SoundEmitter.Volume < 0.98)
+                {
+                    selectMusicObject.SoundEmitter.Volume += 0.03; //Speed
+                }
+                
+                if(selectMusicObject.SoundEmitter.Volume >= 0.98)
+                {
+                    selectMusicObject.SoundEmitter.Volume = 1;
+                    //this.BackGroundIsSilent = true;
+                    //Load level
+                }
+            }
+        }
+        else
+        {
+            if(this.CanPlaySound == true)
+            {
+                var selectSound = this.Space.CreateAtPosition(this.MusicToSpawn, Real3(0, 0, 0));
+                selectSound.SoundEmitter.Volume = 0;
+                selectSound.SoundEmitter.Play();
+                selectSound.Persistent = true;
+                this.CanPlaySound = false;
+            }
+        }
+    }
+}

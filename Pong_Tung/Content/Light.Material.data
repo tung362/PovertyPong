@@ -1,0 +1,13 @@
+Material = 
+{
+	Lambert = 
+	{
+	},
+	TextureDiffuse = 
+	{
+		string DiffuseTexture = "543d955aa35f5878:WallBG",
+		Vec2 DiffuseScroll = [0, 0],
+		Vec2 DiffuseTiling = [2, 2],
+		Vec2 DiffuseOffset = [0, 0],
+	},
+},

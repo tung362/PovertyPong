@@ -1,0 +1,20 @@
+ImageContent = 
+{
+	SpriteSourceBuilder = 
+	{
+		string Name = "TungBodyJumpAttack",
+		uint64 ResourceId = 54298c3ead1b7f21,
+		uint64 AtlasId = 5274cf95e4a661fd,
+		uint FrameSizeX = 100,
+		uint FrameSizeY = 100,
+		uint FrameCount = 4,
+		float FrameDelay = 0.1,
+		float OriginX = 50,
+		float OriginY = 50,
+		float PixelsPerUnit = 64,
+		bool Smoothing = false,
+		bool Looping = true,
+		Vec4 Slices = [0, 0, 0, 0],
+		SpriteFill Fill = Stretch,
+	},
+},

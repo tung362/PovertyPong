@@ -1,0 +1,190 @@
+class DontGoThroughWalls : ZilchComponent
+{
+    var PreviousPosition : Real3 = Real3(0, 0, 0);
+    var LastImpactPoint : Real3 = Real3(0, 0, 0);
+    var OtherObject : Cog = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        
+        this.PreviousPosition = this.Owner.Transform.Translation;
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var tracker = this.Space.FindObjectByName("Mode2Tracker");
+        
+        var movementThisStep : Real3 = this.Owner.RigidBody.Velocity;
+        ////////////////////////////////////////////////////////////////////
+        
+        var ray = Ray();
+        
+        ray.Start = this.PreviousPosition;
+        ray.Direction = movementThisStep;
+        ray.Direction = Math.Normalize(ray.Direction);
+        
+        //Filters
+        var myFilter = CastFilter();
+        myFilter.IgnoreGhost = false;
+        myFilter.IgnoreChildren = false;
+        myFilter.CollisionGroup = CollisionGroup.Find("BallRaycast");
+        
+        var result = this.Space.PhysicsSpace.CastRayFirstFiltered(ray, myFilter);
+        
+        if(result.ObjectHit != null)
+        {
+            //Console.WriteLine("Start");
+            
+            this.OtherObject = result.ObjectHit;
+            this.LastImpactPoint = result.WorldPosition;
+            
+            if(this.OtherObject.Name == "RightWall")
+            {
+                var dis = this.LastImpactPoint - this.Owner.Transform.WorldTranslation;
+                //Console.WriteLine(dis);
+                
+                if(dis.X < -4)
+                {
+                    this.Owner.Transform.Translation = this.LastImpactPoint - Real3(4, 0, 0);
+                    this.Owner.Mode2BallMovement.StartX = -(this.Owner.Mode2BallMovement.StartX);
+                }
+            }
+            
+            else if(this.OtherObject.Name == "LeftWall")
+            {
+                var dis = this.LastImpactPoint - this.Owner.Transform.WorldTranslation;
+                //Console.WriteLine(dis);
+                
+                if(dis.X > 4)
+                {
+                    this.Owner.Transform.Translation = this.LastImpactPoint + Real3(4, 0, 0);
+                    this.Owner.Mode2BallMovement.StartX = -(this.Owner.Mode2BallMovement.StartX);
+                }
+            }
+            
+            else if(this.OtherObject.Name == "TopWall")
+            {
+                var dis = this.LastImpactPoint - this.Owner.Transform.WorldTranslation;
+                //Console.WriteLine(dis);
+                
+                if(dis.Y < -4)
+                {
+                    this.Owner.Transform.Translation = this.LastImpactPoint - Real3(0, 4, 0);
+                    this.Owner.Mode2BallMovement.StartY = -(this.Owner.Mode2BallMovement.StartY);
+                    //Console.WriteLine("1Top");
+                }
+            }
+            
+            else if(this.OtherObject.Name == "BottomWall")
+            {
+                var dis = this.LastImpactPoint - this.Owner.Transform.WorldTranslation;
+                //Console.WriteLine(dis);
+                
+                if(dis.Y > 4)
+                {
+                    this.Owner.Transform.Translation = this.LastImpactPoint + Real3(0, 4, 0);
+                    this.Owner.Mode2BallMovement.StartY = -(this.Owner.Mode2BallMovement.StartY);
+                    //Console.WriteLine("1Bottom");
+                }
+            }
+        }
+        else
+        {
+            if(tracker.Mode2Tracker.BallSuperHit == false && this.Owner.Mode2BallMovement.FirstHit == false)
+            {
+                //this.Owner.Transform.Translation = this.LastImpactPoint;
+                //Console.WriteLine(this.OtherObject.Name);
+                
+                if(this.OtherObject.Name == "RightWall")
+                {
+                    var dis = this.LastImpactPoint - this.Owner.Transform.WorldTranslation;
+                    //Console.WriteLine(dis);
+                    
+                    if(dis.X < -4)
+                    {
+                        this.Owner.Transform.Translation = this.LastImpactPoint - Real3(4, 0, 0);
+                        this.Owner.Mode2BallMovement.StartX = -(this.Owner.Mode2BallMovement.StartX);
+                    }
+                }
+                
+                else if(this.OtherObject.Name == "LeftWall")
+                {
+                    var dis = this.LastImpactPoint - this.Owner.Transform.WorldTranslation;
+                    //Console.WriteLine(dis);
+                    
+                    if(dis.X > 4)
+                    {
+                        this.Owner.Transform.Translation = this.LastImpactPoint + Real3(4, 0, 0);
+                        this.Owner.Mode2BallMovement.StartX = -(this.Owner.Mode2BallMovement.StartX);
+                    }
+                }
+                
+                else if(this.OtherObject.Name == "TopWall")
+                {
+                    var dis = this.LastImpactPoint - this.Owner.Transform.WorldTranslation;
+                    //Console.WriteLine(dis);
+                    
+                    if(dis.Y < -4)
+                    {
+                        this.Owner.Transform.Translation = this.LastImpactPoint - Real3(0, 4, 0);
+                        this.Owner.Mode2BallMovement.StartY = -(this.Owner.Mode2BallMovement.StartY);
+                        //Console.WriteLine("2Top");
+                    }
+                }
+                
+                else if(this.OtherObject.Name == "BottomWall")
+                {
+                    var dis = this.LastImpactPoint - this.Owner.Transform.WorldTranslation;
+                    //Console.WriteLine(dis);
+                    
+                    if(dis.Y > 4)
+                    {
+                        this.Owner.Transform.Translation = this.LastImpactPoint + Real3(0, 4, 0);
+                        this.Owner.Mode2BallMovement.StartY = -(this.Owner.Mode2BallMovement.StartY);
+                        //Console.WriteLine("2Bottom");
+                    }
+                }
+            }
+            
+            else if (tracker.Mode2Tracker.BallSuperHit == true)
+            {
+                if(this.OtherObject.Name == "PlayerRightJA")
+                {
+                    this.Owner.Transform.Translation = this.LastImpactPoint;
+                }
+                
+                else if(this.OtherObject.Name == "PlayerLeftJA")
+                {
+                    this.Owner.Transform.Translation = this.LastImpactPoint;
+                }
+                
+                else if(this.OtherObject.Name == "PlayerRightSwing")
+                {
+                    this.Owner.Transform.Translation = this.LastImpactPoint;
+                }
+                
+                else if(this.OtherObject.Name == "PlayerLeftSwing")
+                {
+                    this.Owner.Transform.Translation = this.LastImpactPoint;
+                }
+            }
+        }
+        
+        var distance = result.Distance;
+        //this.DrawArrow(ray, distance);
+        
+        ////////////////////////////////////////////////////////////////////
+        this.PreviousPosition = this.Owner.Transform.Translation;
+    }
+    
+    //Debug Purposes
+    /*function DrawArrow(ray : Ray, distance : Real)
+    {
+        var end = ray.Start + ray.Direction * distance;
+        
+        var line = new DebugLine();
+        line.Start(ray.Start).End(end).HeadSize(0.25).Float4Color(Real4(1,0,0,1)).OnTop(true);
+        line.Draw();
+    }*/
+}

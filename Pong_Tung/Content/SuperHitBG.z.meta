@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "SuperHitBG",
+		uint64 ResourceId = 54e68abfad2c63a4,
+	},
+},

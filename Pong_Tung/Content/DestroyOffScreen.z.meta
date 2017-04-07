@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "DestroyOffScreen",
+		uint64 ResourceId = 54e4f8bcc10d7ec3,
+	},
+},

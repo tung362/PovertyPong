@@ -1,0 +1,14 @@
+class Mode2Tracker : ZilchComponent
+{
+    var BallSuperHit : Boolean = false;
+    var BlackScreen : Boolean = false;
+    
+    function Initialize(init : CogInitializer)
+    {
+        //Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+    }
+}

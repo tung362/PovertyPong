@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "P2Tung",
+		uint64 ResourceId = 542b428babd940a3,
+	},
+},

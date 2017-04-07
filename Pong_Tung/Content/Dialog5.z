@@ -1,0 +1,83 @@
+class Dialog5 : ZilchComponent
+{
+    //Controller ID
+    [Property]
+    var PlayerIndex : Integer = 0;
+    [Property]
+    var PlayerIndex2 : Integer = 1;
+    // The gamepad that our player is using
+    var Controller:Gamepad = null;
+    var Controller2:Gamepad = null;
+    
+    var Start : Boolean = false;
+    var Start2 : Boolean = true;
+    var Timer : Real = 0;
+    
+    function Initialize(init : CogInitializer)
+    {
+        this.Controller = Zero.Gamepads.GetGamePad(this.PlayerIndex);
+        this.Controller2 = Zero.Gamepads.GetGamePad(this.PlayerIndex2);
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var deltaTime = event.Dt;
+        
+        var prologue = this.Space.FindObjectByName("PrologueTracker");
+        var icon = this.Owner.FindChildByName("Icon");
+        var text = this.Owner.FindChildByName("Text");
+        var background = this.Owner.FindChildByName("Background");
+        var enter = this.Owner.FindChildByName("Enter");
+        
+        if(prologue.PrologueTracker.Dialog5 == true && prologue.PrologueTracker.CanPlay == true )
+        {
+            this.Timer += deltaTime;
+            
+            if(this.Start == true)
+            {
+                enter.Sprite.Visible = true;
+                background.Sprite.Visible = true;
+                icon.Sprite.Visible = true;
+                text.SpriteText.Visible = true;
+                this.Start2 = true;
+                this.Start = false;
+            }
+                
+            if(this.Timer > 0.5)
+            {
+                if(Zero.Keyboard.KeyIsPressed(Keys.Enter))
+                {
+                    prologue.PrologueTracker.Dialog6 = true;
+                    prologue.PrologueTracker.Dialog5 = false;
+                    this.Timer = 0;
+                }
+                
+                if(this.Controller.IsActive && this.Controller.IsButtonPressed(Buttons.A))
+                {
+                    prologue.PrologueTracker.Dialog6 = true;
+                    prologue.PrologueTracker.Dialog5 = false;
+                    this.Timer = 0;
+                }
+                if(this.Controller2.IsActive && this.Controller2.IsButtonPressed(Buttons.A))
+                {
+                    prologue.PrologueTracker.Dialog6 = true;
+                    prologue.PrologueTracker.Dialog5 = false;
+                    this.Timer = 0;
+                }
+            }
+        }
+        else
+        {
+            if(this.Start2 == true)
+            {
+                enter.Sprite.Visible = false;
+                background.Sprite.Visible = false;
+                icon.Sprite.Visible = false;
+                text.SpriteText.Visible = false;
+                this.Start = true;
+                this.Start2 = false;
+            }
+        }
+    }
+}

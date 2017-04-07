@@ -1,0 +1,353 @@
+class TungController : ZilchComponent
+{
+    //Controller ID
+    [Property]
+    var PlayerIndex : Integer = 0;
+    // The gamepad that our player is using
+    var Controller:Gamepad = null;
+    //Converts to WASD like controls but with controller stick
+    var GamePadLeft : Boolean = false;
+    var GamePadRight : Boolean = false;
+    var GamePadDown : Boolean = false;
+    var GamePadJump : Boolean = false;
+    var GamePadSwing : Boolean = false;
+    var GamePadBunt : Boolean = false;
+    
+    var UpdateGamePad : Boolean = true;
+    
+    var SwingCooldownTimer : Real = 0;
+    
+    [Property]
+    var SwingDelay : Real = 0.5;
+    [Property]
+    var IsPlayer1 : Boolean = true;
+    
+    var CanMove : Boolean = true;
+    
+    var IsRight : Boolean = true;
+    
+    var PreviousActionPos : Real3 = Real3(0, 0, 0);
+    
+    //Default movement settings
+    var StartingGravity : Real = 0;
+    var StartingJumpSpeed : Real = 0;
+    var StartingMaxMoveSpeed : Real = 0;
+    var StartingMaxFallSpeed : Real = 0;
+    var StartingGroundAcceleration : Real = 0;
+    var StartingAirAcceleration : Real = 0;
+    var StartingGroundDeceleration : Real = 0;
+    var StartingAirDeceleration : Real = 0;
+    
+    var PlayJumpSound : Boolean = true;
+    
+    function Initialize(init : CogInitializer)
+    {
+        this.Controller = Zero.Gamepads.GetGamePad(this.PlayerIndex);
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        
+        this.StartingGravity = this.Owner.TungMovement.Gravity;
+        this.StartingJumpSpeed = this.Owner.TungMovement.JumpSpeed;
+        this.StartingMaxMoveSpeed = this.Owner.TungMovement.MaxMoveSpeed;
+        this.StartingMaxFallSpeed = this.Owner.TungMovement.MaxFallSpeed;
+        this.StartingGroundAcceleration = this.Owner.TungMovement.GroundAcceleration;
+        this.StartingAirAcceleration = this.Owner.TungMovement.AirAcceleration;
+        this.StartingGroundDeceleration = this.Owner.TungMovement.GroundDeceleration;
+        this.StartingAirDeceleration = this.Owner.TungMovement.AirDeceleration;
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var deltatime = event.Dt;
+        var movement = Real3(0.0, 0.0, 0.0);
+        var tracker  = this.Space.FindObjectByName("Mode2Tracker");
+        
+        if(this.UpdateGamePad == true)
+        {
+            this.Controller = Zero.Gamepads.GetGamePad(this.PlayerIndex);
+            this.UpdateGamePad = false;
+        }
+        
+        if(tracker.Mode2Tracker.BallSuperHit == false)
+        {
+            //Controller To WASD and other buttons
+            if(this.Controller.IsActive)
+            {
+                //S
+                if((this.Controller.LeftStick.Y < 0 && this.Controller.LeftStick.X > -0.4 && this.Controller.LeftStick.X < 0.4) || this.Controller.IsButtonHeld(Buttons.DpadDownFiltered))
+                {
+                    this.GamePadDown = true;
+                }
+                else
+                {
+                    this.GamePadDown = false;
+                }
+                
+                //A
+                if(this.Controller.LeftStick.X < 0 || this.Controller.IsButtonHeld(Buttons.DpadLeftFiltered))
+                {
+                    this.GamePadLeft = true;
+                }
+                else
+                {
+                    this.GamePadLeft = false;
+                }
+                
+                //D
+                if(this.Controller.LeftStick.X > 0 || this.Controller.IsButtonHeld(Buttons.DpadRightFiltered))
+                {
+                    this.GamePadRight = true;
+                }
+                else
+                {
+                    this.GamePadRight = false;
+                }
+                
+                //Jump
+                if(this.Controller.IsButtonHeld(Buttons.A))
+                {
+                    this.GamePadJump = true;
+                }
+                else
+                {
+                    this.GamePadJump = false;
+                }
+                
+                //Swing
+                if(this.Controller.IsButtonPressed(Buttons.X) || this.Controller.IsButtonPressed(Buttons.LeftShoulder))
+                {
+                    this.GamePadSwing = true;
+                }
+                else
+                {
+                    this.GamePadSwing = false;
+                }
+                
+                //Bunt
+                if(this.Controller.IsButtonPressed(Buttons.B) || this.Controller.IsButtonPressed(Buttons.RightShoulder))
+                {
+                    this.GamePadBunt = true;
+                }
+                else
+                {
+                    this.GamePadBunt = false;
+                }
+            }
+            
+            //Can move again after delay
+            if(this.CanMove == false)
+            {
+                this.SwingCooldownTimer += deltatime;
+                
+                if(this.SwingCooldownTimer > this.SwingDelay)
+                {
+                    this.CanMove = true;
+                    this.SwingCooldownTimer = 0;
+                }
+            }
+            
+            //If Player 1
+            if(this.IsPlayer1 == true)
+            {
+                //Left
+                if((Zero.Keyboard.KeyIsDown(Keys.A) || this.GamePadLeft == true) && this.CanMove == true)
+                {
+                    //if not swinging or bunting
+                    if(Zero.Keyboard.KeyIsPressed(Keys.U) == false && Zero.Keyboard.KeyIsPressed(Keys.I) == false && this.GamePadSwing == false && this.GamePadBunt == false)
+                    {
+                        //if not kneeling
+                        if(Zero.Keyboard.KeyIsDown(Keys.S) == false && this.GamePadDown == false)
+                        {
+                            movement.X = -1.0;
+                        }
+                        
+                        if(this.Owner.TungMovement.Grounded)
+                        {
+                            this.Owner.Sprite.FlipX = true;
+                            this.IsRight = false;
+                        }
+                    }
+                    else
+                    {
+                        if(this.Owner.TungMovement.Grounded && this.Owner.TungAnimation.HasSwinged == false)
+                        {
+                            movement.X = 0;
+                            this.Owner.RigidBody.Velocity = Real3(0, 0, 0);
+                            this.CanMove = false;
+                        }
+                    }
+                }
+                
+                //Right
+                if((Zero.Keyboard.KeyIsDown(Keys.D) || this.GamePadRight == true) && this.CanMove == true)
+                {
+                    //if not swinging or bunting
+                    if(Zero.Keyboard.KeyIsPressed(Keys.U) == false && Zero.Keyboard.KeyIsPressed(Keys.I) == false && this.GamePadSwing == false && this.GamePadBunt == false)
+                    {
+                        if(Zero.Keyboard.KeyIsDown(Keys.S) == false && this.GamePadDown == false)
+                        {
+                            movement.X = 1.0;
+                        }
+                        
+                        if(this.Owner.TungMovement.Grounded)
+                        {
+                            this.Owner.Sprite.FlipX = false;
+                            this.IsRight = true;
+                        }
+                    }
+                    else
+                    {
+                        if(this.Owner.TungMovement.Grounded && this.Owner.TungAnimation.HasSwinged == false)
+                        {
+                            movement.X = 0;
+                            this.Owner.RigidBody.Velocity = Real3(0, 0, 0);
+                            this.CanMove = false;
+                        }
+                    }
+                }
+                
+                if(this.Owner.TungMovement.Grounded == false)
+                {
+                    if(Zero.Keyboard.KeyIsDown(Keys.D) || this.GamePadRight == true)
+                    {
+                        movement.X = 1.0;
+                    }
+                    
+                    if(Zero.Keyboard.KeyIsDown(Keys.A) || this.GamePadLeft == true)
+                    {
+                        movement.X = -1.0;
+                    }
+                }
+                
+                //Jump
+                if(Zero.Keyboard.KeyIsPressed(Keys.Space) || this.GamePadJump == true)
+                {
+                    this.Owner.TungMovement.Jump();
+                    
+                    /*if(this.PlayJumpSound == true)
+                    {
+                        this.Owner.SoundEmitter.Cue = SoundCue.Find("SedrickJump");
+                        this.Owner.SoundEmitter.Volume = 0.1;
+                        this.Owner.SoundEmitter.Play();
+                        this.PlayJumpSound = false;
+                    }*/
+                }
+                /*else
+                {
+                    if(this.PlayJumpSound == false && this.Owner.TungMovement.Grounded)
+                    {
+                        this.PlayJumpSound = true;
+                    }
+                }*/
+            }
+            //If Player2
+            else
+            {
+                //Left
+                if((Zero.Keyboard.KeyIsDown(Keys.F) || this.GamePadLeft == true) && this.CanMove == true)
+                {
+                    
+                    //if not swinging or bunting
+                    if(Zero.Keyboard.KeyIsPressed(Keys.O) == false && Zero.Keyboard.KeyIsPressed(Keys.P) == false && this.GamePadSwing == false && this.GamePadBunt == false)
+                    {
+                        //if not kneeling
+                        if(Zero.Keyboard.KeyIsDown(Keys.G) == false && this.GamePadDown == false)
+                        {
+                            movement.X = -1.0;
+                        }
+                        
+                        if(this.Owner.TungMovement.Grounded)
+                        {
+                            this.Owner.Sprite.FlipX = true;
+                            this.IsRight = false;
+                        }
+                    }
+                    else
+                    {
+                        if(this.Owner.TungMovement.Grounded && this.Owner.TungAnimation.HasSwinged == false)
+                        {
+                            movement.X = 0;
+                            this.Owner.RigidBody.Velocity = Real3(0, 0, 0);
+                            this.CanMove = false;
+                        }
+                    }
+                }
+                
+                //Right
+                if((Zero.Keyboard.KeyIsDown(Keys.H) || this.GamePadRight == true) && this.CanMove == true)
+                {
+                    //if not swinging or bunting
+                    if(Zero.Keyboard.KeyIsPressed(Keys.O) == false && Zero.Keyboard.KeyIsPressed(Keys.P) == false && this.GamePadSwing == false && this.GamePadBunt == false)
+                    {
+                        if(Zero.Keyboard.KeyIsDown(Keys.G) == false && this.GamePadDown == false)
+                        {
+                            movement.X = 1.0;
+                        }
+                        
+                        if(this.Owner.TungMovement.Grounded)
+                        {
+                            this.Owner.Sprite.FlipX = false;
+                            this.IsRight = true;
+                        }
+                    }
+                    else
+                    {
+                        if(this.Owner.TungMovement.Grounded && this.Owner.TungAnimation.HasSwinged == false)
+                        {
+                            movement.X = 0;
+                            this.Owner.RigidBody.Velocity = Real3(0, 0, 0);
+                            this.CanMove = false;
+                        }
+                    }
+                }
+                
+                if(this.Owner.TungMovement.Grounded == false)
+                {
+                    if(Zero.Keyboard.KeyIsDown(Keys.H) || this.GamePadRight == true)
+                    {
+                        movement.X = 1.0;
+                    }
+                    
+                    if(Zero.Keyboard.KeyIsDown(Keys.F) || this.GamePadLeft == true)
+                    {
+                        movement.X = -1.0;
+                    }
+                }
+                
+                //Jump
+                if(Zero.Keyboard.KeyIsPressed(Keys.M) || this.GamePadJump == true)
+                {
+                    this.Owner.TungMovement.Jump();
+                }
+            }
+            
+            //Resets movement settings to default
+            this.Owner.TungMovement.Gravity = this.StartingGravity;
+            this.Owner.TungMovement.JumpSpeed = this.StartingJumpSpeed;
+            this.Owner.TungMovement.MaxMoveSpeed = this.StartingMaxMoveSpeed;
+            this.Owner.TungMovement.MaxFallSpeed = this.StartingMaxFallSpeed;
+            this.Owner.TungMovement.GroundAcceleration = this.StartingGroundAcceleration;
+            this.Owner.TungMovement.AirAcceleration = this.StartingAirAcceleration;
+            this.Owner.TungMovement.GroundDeceleration = this.StartingGroundDeceleration;
+            this.Owner.TungMovement.AirDeceleration = this.StartingAirDeceleration;
+            this.PreviousActionPos = this.Owner.Transform.Translation;
+            this.Owner.TungMovement.Update(movement, event.Dt);
+        }
+        else
+        {
+            //Stops everything in the movement settings
+            movement.X = 0;
+            movement.Y = 0;
+            this.Owner.TungMovement.Gravity = 0;
+            this.Owner.TungMovement.JumpSpeed = 0;
+            this.Owner.TungMovement.MaxMoveSpeed = 0;
+            this.Owner.TungMovement.MaxFallSpeed = 0;
+            this.Owner.TungMovement.GroundAcceleration = 0;
+            this.Owner.TungMovement.AirAcceleration = 0;
+            this.Owner.TungMovement.GroundDeceleration = 0;
+            this.Owner.TungMovement.AirDeceleration = 0;
+            this.Owner.TungMovement.Update(Real3(0, 0, 0), event.Dt);
+            
+            this.Owner.Transform.Translation = this.PreviousActionPos;
+        }
+    }
+}

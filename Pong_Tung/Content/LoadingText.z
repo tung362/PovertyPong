@@ -1,0 +1,44 @@
+class LoadingText : ZilchComponent
+{
+    var Timer : Real = 0;
+    [Property]
+    var StateNum : Integer = 0;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var deltatime = event.Dt;
+        this.Timer += deltatime;
+        
+        if(this.Timer > 0.5)
+        {
+            this.StateNum += 1;
+            this.Timer = 0;
+        }
+        
+        if(this.StateNum == 1)
+        {
+            this.Owner.SpriteText.Text = "Loading.";
+        }
+        
+        else if(this.StateNum == 2)
+        {
+            this.Owner.SpriteText.Text = "Loading..";
+        }
+        
+        else if(this.StateNum == 3)
+        {
+            this.Owner.SpriteText.Text = "Loading...";
+        }
+        
+        else if(this.StateNum == 4)
+        {
+            this.Owner.SpriteText.Text = "Loading";
+            this.StateNum = 0;
+        }
+    }
+}

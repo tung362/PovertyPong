@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "WhiteFlash",
+		uint64 ResourceId = 542c618510f6be76,
+	},
+},

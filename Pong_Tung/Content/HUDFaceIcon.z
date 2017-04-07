@@ -1,0 +1,91 @@
+class HUDFaceIcon : ZilchComponent
+{
+    [Property]
+    var IsPlayer1 : Boolean = true;
+    [Property]
+    var TungIcon : SpriteSource = null;
+    [Property]
+    var AustinIcon : SpriteSource = null;
+    [Property]
+    var JulioIcon : SpriteSource = null;
+    [Property]
+    var SedrickIcon : SpriteSource = null;
+    [Property]
+    var PeytonIcon : SpriteSource = null;
+    [Property]
+    var TreIcon : SpriteSource = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        //1 = Tung, 2 = Austin, 3 = Julio, 4 = Sedrick, 5 = Peyton, 6 = Tre
+        if(this.IsPlayer1 == true)
+        {
+            if(this.Space.Global.P1IDNum == 1)
+            {
+                this.Owner.Sprite.SpriteSource = this.TungIcon;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 2)
+            {
+                this.Owner.Sprite.SpriteSource = this.AustinIcon;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 3)
+            {
+                this.Owner.Sprite.SpriteSource = this.JulioIcon;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 4)
+            {
+                this.Owner.Sprite.SpriteSource = this.SedrickIcon;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 5)
+            {
+                this.Owner.Sprite.SpriteSource = this.PeytonIcon;
+            }
+            
+            else if(this.Space.Global.P1IDNum == 6)
+            {
+                this.Owner.Sprite.SpriteSource = this.TreIcon;
+            }
+        }
+        else
+        {
+            if(this.Space.Global.P2IDNum == 1)
+            {
+                this.Owner.Sprite.SpriteSource = this.TungIcon;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 2)
+            {
+                this.Owner.Sprite.SpriteSource = this.AustinIcon;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 3)
+            {
+                this.Owner.Sprite.SpriteSource = this.JulioIcon;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 4)
+            {
+                this.Owner.Sprite.SpriteSource = this.SedrickIcon;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 5)
+            {
+                this.Owner.Sprite.SpriteSource = this.PeytonIcon;
+            }
+            
+            else if(this.Space.Global.P2IDNum == 6)
+            {
+                this.Owner.Sprite.SpriteSource = this.TreIcon;
+            }
+        }
+    }
+}

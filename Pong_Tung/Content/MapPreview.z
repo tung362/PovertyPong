@@ -1,0 +1,32 @@
+class MapPreview : ZilchComponent
+{
+    [Property]
+    var Stage1 : SpriteSource = null;
+    [Property]
+    var Stage2 : SpriteSource = null;
+    [Property]
+    var Stage3 : SpriteSource = null;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.Space.Global.MapIDNum == 1)
+        {
+            this.Owner.Sprite.SpriteSource = this.Stage1;
+        }
+        
+        else if(this.Space.Global.MapIDNum == 2)
+        {
+            this.Owner.Sprite.SpriteSource = this.Stage2;
+        }
+        
+        else if(this.Space.Global.MapIDNum == 3)
+        {
+            this.Owner.Sprite.SpriteSource = this.Stage3;
+        }
+    }
+}

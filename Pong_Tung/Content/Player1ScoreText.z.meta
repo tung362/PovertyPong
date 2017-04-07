@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "Player1ScoreText",
+		uint64 ResourceId = 5436fa370994fb39,
+	},
+},

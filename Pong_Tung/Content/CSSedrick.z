@@ -1,0 +1,53 @@
+class CSSedrick : ZilchComponent
+{
+    [Property]
+    var ImageS : SpriteSource = null;
+    [Property]
+    var Image : SpriteSource = null;
+    
+    var LeftClicked : Boolean = false;
+    
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        Zero.Connect(this.Owner, Events.MouseUp, this.OnMouseUp);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.Space.Global.P1IDNum == 4 || this.Space.Global.P2IDNum == 4)
+        {
+            this.Owner.Sprite.SpriteSource = this.ImageS;
+        }
+        else
+        {
+            this.Owner.Sprite.SpriteSource = this.Image;
+        }
+        
+        if(Zero.Mouse.IsButtonDown(MouseButtons.Left))
+        {
+            this.LeftClicked = true;
+        }
+        
+        else if(Zero.Mouse.IsButtonDown(MouseButtons.Right))
+        {
+            this.LeftClicked = false;
+        }
+    }
+    
+    function OnMouseUp(event : ViewportMouseEvent)
+    {
+        //Let Go Of Click
+        
+        //1 = Tung, 2 = Austin, 3 = Julio, 4 = Sedrick, 5 = Peyton, 6 = Tre
+        if(this.LeftClicked == true)
+        {
+            this.Space.Global.P1IDNum = 4;
+        }
+        
+        else if(this.LeftClicked == false)
+        {
+            this.Space.Global.P2IDNum = 4;
+        }
+    }
+}

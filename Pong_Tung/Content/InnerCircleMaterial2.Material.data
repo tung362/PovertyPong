@@ -1,0 +1,20 @@
+Material = 
+{
+	Phong = 
+	{
+		float SpecularExponent = 40,
+		float SpecularScalar = 1,
+	},
+	Transparency = 
+	{
+		MaterialBlendMode BlendMode = Multiply,
+	},
+	InnerCircleShader = 
+	{
+		string InnerTexture = "5582187a4924a4d6:ShaderTexture1",
+		float InnerRange = 0.8,
+		float OuterIntensity = 5,
+		Vec4 EdgeGlowColor = [0.53, 0, 1, 1],
+		Vec4 EdgeGlowColor2 = [1, 0.985, 0.625, 0.9999],
+	},
+},

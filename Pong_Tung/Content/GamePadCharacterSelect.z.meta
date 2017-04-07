@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "GamePadCharacterSelect",
+		uint64 ResourceId = 54dbd5fc1f053183,
+	},
+},

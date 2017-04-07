@@ -1,0 +1,28 @@
+Material = 
+{
+	Phong = 
+	{
+		float SpecularExponent = 37,
+		float SpecularScalar = 1,
+	},
+	Transparency = 
+	{
+		MaterialBlendMode BlendMode = Multiply,
+	},
+	InnerCircleShader = 
+	{
+		string TestTexture = "",
+		float InnerRange = 0.8,
+		float OuterIntensity = 5,
+		Vec4 AdditiveColorPicker = [0, 0, 0, 1],
+		Vec4 SurfaceColorPicker = [0, 0, 0, 1],
+	},
+	NormalMapping = 
+	{
+		float Bumpiness = 1,
+		string NormalMapTexture = "5582187a4924a4d6:ShaderTexture1",
+		Vec2 NormalScroll = [0, 0],
+		Vec2 NormalTiling = [1, 1],
+		Vec2 NormalOffset = [-70, 0],
+	},
+},

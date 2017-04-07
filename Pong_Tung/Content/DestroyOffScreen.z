@@ -1,0 +1,29 @@
+class DestroyOffScreen : ZilchComponent
+{
+    function Initialize(init : CogInitializer)
+    {
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+        Zero.Connect(this.Owner, Events.ExitView, this.OnExitView);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        if(this.Owner.Transform.Translation.X > 50 || this.Owner.Transform.Translation.X < -50 || this.Owner.Transform.Translation.Y > 50 || this.Owner.Transform.Translation.Y < -50)
+        {
+            this.Owner.Transform.Translation = Real3(0, 0, 1.5);
+        }
+        
+        if(this.Owner.Transform.Translation.X > 1000 || this.Owner.Transform.Translation.X < -1000 || this.Owner.Transform.Translation.Y > 1000 || this.Owner.Transform.Translation.Y < -1000)
+        {
+            this.Owner.Destroy();
+        }
+        
+        //Console.WriteLine(this.Owner.Transform.Translation);
+    }
+    
+    function OnExitView(event : GraphicalEvent)
+    {
+        //Console.WriteLine("Test");
+        this.Owner.Destroy();
+    }
+}

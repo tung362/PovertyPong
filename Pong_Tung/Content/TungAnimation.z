@@ -1,0 +1,824 @@
+class TungAnimation : ZilchComponent
+{
+    //Controller ID
+    [Property]
+    var PlayerIndex : Integer = 0;
+    // The gamepad that our player is using
+    var Controller:Gamepad = null;
+    //Converts to WASD like controls but with controller stick
+    var GamePadLeft : Boolean = false;
+    var GamePadRight : Boolean = false;
+    var GamePadDown : Boolean = false;
+    var GamePadJump : Boolean = false;
+    var GamePadSwing : Boolean = false;
+    var GamePadBunt : Boolean = false;
+    
+    var UpdateGamePad : Boolean = true;
+    
+    [Property]
+    var IsPlayer1 : Boolean = true;
+    
+    //Animations
+    [Property]
+    var PlayerIdle : SpriteSource = null;
+    [Property]
+    var PlayerWalk : SpriteSource = null;
+    [Property]
+    var PlayerJump : SpriteSource = null;
+    [Property]
+    var PlayerKneel : SpriteSource = null;
+    [Property]
+    var PlayerSwing : SpriteSource = null;
+    [Property]
+    var PlayerBunt : SpriteSource = null;
+    [Property]
+    var PlayerGroundBunt : SpriteSource = null;
+    [Property]
+    var PlayerJumpAttack : SpriteSource = null;
+    [Property]
+    var PlayerSuperSwing : SpriteSource = null;
+    [Property]
+    var PlayerSuperJumpAttack : SpriteSource = null;
+    
+    //Collision Group
+    [Property]
+    var GhostGroup : CollisionGroup = null;
+    [Property]
+    var SolidGroup : CollisionGroup = null;
+    
+    //Swing Delay
+    var SwingStopperTimer : Real = 0;
+    [Property]
+    var SwingStopperDelay : Real = 0.5;
+    var HasSwinged : Boolean = false;
+    
+    //Jump Attack Delay
+    var JSStopperTimer : Real = 0;
+    [Property]
+    var JSStopperDelay : Real = 0.5;
+    var HasJSwinged : Boolean = false;
+    
+    //Frames
+    [Property]
+    var SwingMaxFrame : Real = 3;
+    [Property]
+    var BuntMaxFrame : Real = 2;
+    [Property]
+    var JumpAttackMaxFrame : Real = 3;
+    [Property]
+    var AirBuntMaxFrame : Real = 2;
+    
+    var CanPlaySound : Boolean = true;
+    
+    function Initialize(init : CogInitializer)
+    {
+        this.Controller = Zero.Gamepads.GetGamePad(this.PlayerIndex);
+        Zero.Connect(this.Space, Events.LogicUpdate, this.OnLogicUpdate);
+    }
+
+    function OnLogicUpdate(event : UpdateEvent)
+    {
+        var deltatime = event.Dt;
+        var tracker  = this.Space.FindObjectByName("Mode2Tracker");
+        
+        //Find All Child Hit Boxes
+        var playerRightBunt = this.Owner.FindChildByName("PlayerRightBunt");
+        var playerLeftBunt = this.Owner.FindChildByName("PlayerLeftBunt");
+        var playerRightSwing = this.Owner.FindChildByName("PlayerRightSwing");
+        var playerLeftSwing = this.Owner.FindChildByName("PlayerLeftSwing");
+        var playerRightJA = this.Owner.FindChildByName("PlayerRightJA");
+        var playerLeftJA = this.Owner.FindChildByName("PlayerLeftJA");
+        
+        if(this.UpdateGamePad == true)
+        {
+            this.Controller = Zero.Gamepads.GetGamePad(this.PlayerIndex);
+            this.UpdateGamePad = false;
+        }
+        
+        if(tracker.Mode2Tracker.BallSuperHit == false)
+        {
+            //Controller To WASD and other buttons
+            if(this.Controller.IsActive)
+            {
+                //S
+                if((this.Controller.LeftStick.Y < 0 && this.Controller.LeftStick.X > -0.4 && this.Controller.LeftStick.X < 0.4) || this.Controller.IsButtonHeld(Buttons.DpadDownFiltered))
+                {
+                    this.GamePadDown = true;
+                }
+                else
+                {
+                    this.GamePadDown = false;
+                }
+                
+                //A
+                if(this.Controller.LeftStick.X < 0 || this.Controller.IsButtonHeld(Buttons.DpadLeftFiltered))
+                {
+                    this.GamePadLeft = true;
+                }
+                else
+                {
+                    this.GamePadLeft = false;
+                }
+                
+                //D
+                if(this.Controller.LeftStick.X > 0 || this.Controller.IsButtonHeld(Buttons.DpadRightFiltered))
+                {
+                    this.GamePadRight = true;
+                }
+                else
+                {
+                    this.GamePadRight = false;
+                }
+                
+                //Jump
+                if(this.Controller.IsButtonHeld(Buttons.A))
+                {
+                    this.GamePadJump = true;
+                }
+                else
+                {
+                    this.GamePadJump = false;
+                }
+                
+                //Swing
+                if(this.Controller.IsButtonPressed(Buttons.X) || this.Controller.IsButtonPressed(Buttons.LeftShoulder))
+                {
+                    this.GamePadSwing = true;
+                }
+                else
+                {
+                    this.GamePadSwing = false;
+                }
+                
+                //Bunt
+                if(this.Controller.IsButtonPressed(Buttons.B) || this.Controller.IsButtonPressed(Buttons.RightShoulder))
+                {
+                    this.GamePadBunt = true;
+                }
+                else
+                {
+                    this.GamePadBunt = false;
+                }
+            }
+            
+            //Can Swing again after delay
+            if(this.HasSwinged == true)
+            {
+                this.SwingStopperTimer += deltatime;
+                
+                if(this.SwingStopperTimer > this.SwingStopperDelay)
+                {
+                    this.HasSwinged = false;
+                    this.SwingStopperTimer = 0;
+                }
+            }
+            
+            //Can Jump Attack again after delay
+            if(this.HasJSwinged == true)
+            {
+                this.JSStopperTimer += deltatime;
+                
+                if(this.JSStopperTimer > this.JSStopperDelay)
+                {
+                    this.HasJSwinged = false;
+                    this.JSStopperTimer = 0;
+                }
+            }
+            
+            
+            //Idle
+            if(this.Owner.Sprite.SpriteSource == this.PlayerIdle)
+            {
+                this.CanPlaySound = true;
+                
+                //playerRightBunt.Sprite.Visible = false;
+                //playerLeftBunt.Sprite.Visible = false;
+                //playerRightSwing.Sprite.Visible = false;
+                //playerLeftSwing.Sprite.Visible = false;
+                //playerRightJA.Sprite.Visible = false;
+                //playerLeftJA.Sprite.Visible = false;
+                
+                playerRightBunt.BoxCollider.CollisionGroup = this.GhostGroup;
+                playerLeftBunt.BoxCollider.CollisionGroup = this.GhostGroup;
+                playerRightSwing.BoxCollider.CollisionGroup = this.GhostGroup;
+                playerLeftSwing.BoxCollider.CollisionGroup = this.GhostGroup;
+                playerRightJA.BoxCollider.CollisionGroup = this.GhostGroup;
+                playerLeftJA.BoxCollider.CollisionGroup = this.GhostGroup;
+                
+                if(this.IsPlayer1 == true)
+                {
+                    //Walk
+                    if(Zero.Keyboard.KeyIsDown(Keys.A) || Zero.Keyboard.KeyIsDown(Keys.D) || this.GamePadLeft == true || this.GamePadRight == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerWalk;
+                    }
+                    
+                    //Jump
+                    if(Zero.Keyboard.KeyIsPressed(Keys.Space) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                    
+                    //Kneel
+                    if(Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerKneel;
+                    }
+                    
+                    //Swing
+                    if((Zero.Keyboard.KeyIsPressed(Keys.U) || this.GamePadSwing == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerSwing;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightSwing.Sprite.Visible = true;
+                            playerRightSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftSwing.Sprite.Visible = true;
+                            playerLeftSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                    
+                    //Bunt
+                    else if((Zero.Keyboard.KeyIsPressed(Keys.I) || this.GamePadBunt == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerGroundBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                }
+                else
+                {
+                    //Walk
+                    if(Zero.Keyboard.KeyIsDown(Keys.F) || Zero.Keyboard.KeyIsDown(Keys.H) || this.GamePadLeft == true || this.GamePadRight == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerWalk;
+                    }
+                    
+                    //Jump
+                    if(Zero.Keyboard.KeyIsPressed(Keys.M) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                    
+                    //Kneel
+                    if(Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerKneel;
+                    }
+                    
+                    //Swing
+                    if((Zero.Keyboard.KeyIsPressed(Keys.O) || this.GamePadSwing == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerSwing;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightSwing.Sprite.Visible = true;
+                            playerRightSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftSwing.Sprite.Visible = true;
+                            playerLeftSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                    
+                    //Bunt
+                    else if((Zero.Keyboard.KeyIsPressed(Keys.P) || this.GamePadBunt == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerGroundBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                }
+            }
+            
+            //Kneel
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerKneel)
+            {
+                this.CanPlaySound = true;
+                
+                if(this.IsPlayer1 == true)
+                {
+                    //Idle
+                    if(Zero.Keyboard.KeyIsDown(Keys.S) == false && this.GamePadDown == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                    }
+                    
+                    //Jump
+                    if(Zero.Keyboard.KeyIsPressed(Keys.Space) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                    
+                    //Swing
+                    if((Zero.Keyboard.KeyIsPressed(Keys.U) || this.GamePadSwing == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerSwing;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightSwing.Sprite.Visible = true;
+                            playerRightSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftSwing.Sprite.Visible = true;
+                            playerLeftSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                    
+                    //Bunt
+                    else if((Zero.Keyboard.KeyIsPressed(Keys.I) || this.GamePadBunt == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerGroundBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                }
+                else
+                {
+                    //Idle
+                    if(Zero.Keyboard.KeyIsDown(Keys.G) == false && this.GamePadDown == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                    }
+                    
+                    //Jump
+                    if(Zero.Keyboard.KeyIsPressed(Keys.M) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                    
+                    //Swing
+                    if((Zero.Keyboard.KeyIsPressed(Keys.O) || this.GamePadSwing == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerSwing;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightSwing.Sprite.Visible = true;
+                            playerRightSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftSwing.Sprite.Visible = true;
+                            playerLeftSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                    
+                    //Bunt
+                    else if((Zero.Keyboard.KeyIsPressed(Keys.P) || this.GamePadBunt == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerGroundBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                }
+            }
+            
+            //Swing
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerSwing)
+            {
+                if(this.CanPlaySound == true)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("Swing");
+                    this.Owner.SoundEmitter.Volume = 0.8;
+                    this.Owner.SoundEmitter.Play();
+                    this.CanPlaySound = false;
+                }
+                
+                this.HasSwinged = true;
+                
+                if(this.IsPlayer1 == true)
+                {
+                    //Idle
+                    if(this.Owner.Sprite.CurrentFrame == this.SwingMaxFrame)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                    }
+                    
+                    //Jump
+                    if(Zero.Keyboard.KeyIsPressed(Keys.Space) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                    
+                    //Bunt
+                    /*if(Zero.Keyboard.KeyIsPressed(Keys.Y) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerGroundBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }*/
+                }
+                else
+                {
+                    //Idle
+                    if(this.Owner.Sprite.CurrentFrame == this.SwingMaxFrame)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                    }
+                    
+                    //Jump
+                    if(Zero.Keyboard.KeyIsPressed(Keys.M) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                }
+            }
+            
+            //Bunt
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerGroundBunt)
+            {
+                if(this.CanPlaySound == true)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("Swing");
+                    this.Owner.SoundEmitter.Volume = 0.8;
+                    this.Owner.SoundEmitter.Play();
+                    this.CanPlaySound = false;
+                }
+                
+                this.HasSwinged = true;
+                
+                if(this.IsPlayer1 == true)
+                {
+                    //Idle
+                    if(this.Owner.Sprite.CurrentFrame == this.BuntMaxFrame)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                    }
+                    
+                    //Jump
+                    if(Zero.Keyboard.KeyIsPressed(Keys.Space) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                    
+                    //Swing
+                    /*if(Zero.Keyboard.KeyIsPressed(Keys.T) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerSwing;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            playerRightSwing.Sprite.Visible = true;
+                            playerRightSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            playerLeftSwing.Sprite.Visible = true;
+                            playerLeftSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }*/
+                }
+                else
+                {
+                    //Idle
+                    if(this.Owner.Sprite.CurrentFrame == this.BuntMaxFrame)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                    }
+                    
+                    //Jump
+                    if(Zero.Keyboard.KeyIsPressed(Keys.M) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                }
+            }
+            
+            //Walk
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerWalk)
+            {
+                this.CanPlaySound = true;
+                
+                if(this.IsPlayer1 == true)
+                {
+                    if(Zero.Keyboard.KeyIsDown(Keys.A) == false && Zero.Keyboard.KeyIsDown(Keys.D) == false && this.GamePadLeft == false && this.GamePadRight == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                    }
+                    
+                    if(Zero.Keyboard.KeyIsPressed(Keys.Space) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                    
+                    //Kneel
+                    if(Zero.Keyboard.KeyIsDown(Keys.S) || this.GamePadDown == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerKneel;
+                    }
+                    
+                    //Swing
+                    if((Zero.Keyboard.KeyIsPressed(Keys.U) || this.GamePadSwing == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerSwing;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightSwing.Sprite.Visible = true;
+                            playerRightSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftSwing.Sprite.Visible = true;
+                            playerLeftSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                    
+                    //Bunt
+                    else if((Zero.Keyboard.KeyIsPressed(Keys.I) || this.GamePadBunt == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerGroundBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                }
+                else
+                {
+                    if(Zero.Keyboard.KeyIsDown(Keys.F) == false && Zero.Keyboard.KeyIsDown(Keys.H) == false && this.GamePadLeft == false && this.GamePadRight == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                    }
+                    
+                    if(Zero.Keyboard.KeyIsPressed(Keys.M) || this.GamePadJump == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                    }
+                    
+                    //Kneel
+                    if(Zero.Keyboard.KeyIsDown(Keys.G) || this.GamePadDown == true)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerKneel;
+                    }
+                    
+                    //Swing
+                    if((Zero.Keyboard.KeyIsPressed(Keys.O) || this.GamePadSwing == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerSwing;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightSwing.Sprite.Visible = true;
+                            playerRightSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftSwing.Sprite.Visible = true;
+                            playerLeftSwing.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                    
+                    //Bunt
+                    else if((Zero.Keyboard.KeyIsPressed(Keys.P) || this.GamePadBunt == true) && this.HasSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerGroundBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                }
+            }
+            
+            //Jump
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerJump)
+            {
+                this.CanPlaySound = true;
+                
+                //Idle
+                if(this.Owner.TungMovement.Grounded)
+                {
+                    if(this.CanPlaySound == true)
+                    {
+                        this.Owner.SoundEmitter.Cue = SoundCue.Find("JumpLand");
+                        this.Owner.SoundEmitter.Volume = 0.8;
+                        this.Owner.SoundEmitter.Play();
+                        this.CanPlaySound = false;
+                    }
+                
+                    this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                }
+                
+                if(this.IsPlayer1 == true)
+                {
+                    //Jump Attack
+                    if((Zero.Keyboard.KeyIsPressed(Keys.U) || this.GamePadSwing == true) && this.HasJSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJumpAttack;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightJA.Sprite.Visible = true;
+                            playerRightJA.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftJA.Sprite.Visible = true;
+                            playerLeftJA.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                    
+                    //Air Bunt
+                    else if((Zero.Keyboard.KeyIsPressed(Keys.I) || this.GamePadBunt == true) && this.HasJSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                }
+                else
+                {
+                    //Jump Attack
+                    if((Zero.Keyboard.KeyIsPressed(Keys.O) || this.GamePadSwing == true) && this.HasJSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerJumpAttack;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightJA.Sprite.Visible = true;
+                            playerRightJA.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftJA.Sprite.Visible = true;
+                            playerLeftJA.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                    
+                    //Air Bunt
+                    else if((Zero.Keyboard.KeyIsPressed(Keys.P) || this.GamePadBunt == true) && this.HasJSwinged == false)
+                    {
+                        this.Owner.Sprite.SpriteSource = this.PlayerBunt;
+                        
+                        if(this.Owner.TungController.IsRight == true)
+                        {
+                            //playerRightBunt.Sprite.Visible = true;
+                            playerRightBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                        else
+                        {
+                            //playerLeftBunt.Sprite.Visible = true;
+                            playerLeftBunt.BoxCollider.CollisionGroup = this.SolidGroup;
+                        }
+                    }
+                }
+            }
+            
+            //Jump Attack
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerJumpAttack)
+            {
+                if(this.CanPlaySound == true)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("Swing");
+                    this.Owner.SoundEmitter.Volume = 0.8;
+                    this.Owner.SoundEmitter.Play();
+                    this.CanPlaySound = false;
+                }
+                
+                this.HasJSwinged = true;
+                
+                //Jump
+                if(this.Owner.Sprite.CurrentFrame == this.JumpAttackMaxFrame)
+                {
+                    this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                }
+                
+                //Idle
+                if(this.Owner.TungMovement.Grounded)
+                {
+                    this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                }
+            }
+            
+            //Air Bunt
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerBunt)
+            {
+                if(this.CanPlaySound == true)
+                {
+                    this.Owner.SoundEmitter.Cue = SoundCue.Find("Swing");
+                    this.Owner.SoundEmitter.Volume = 0.8;
+                    this.Owner.SoundEmitter.Play();
+                    this.CanPlaySound = false;
+                }
+                
+                this.HasJSwinged = true;
+                
+                //Jump
+                if(this.Owner.Sprite.CurrentFrame == this.AirBuntMaxFrame)
+                {
+                    this.Owner.Sprite.SpriteSource = this.PlayerJump;
+                }
+                
+                //Idle
+                if(this.Owner.TungMovement.Grounded)
+                {
+                    this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+                }
+            }
+            
+            //Super Swing
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerSuperSwing)
+            {
+                this.Owner.Sprite.SpriteSource = this.PlayerIdle;
+            }
+            
+            //Super Jump Attack
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerSuperJumpAttack)
+            {
+                this.Owner.Sprite.SpriteSource = this.PlayerJump;
+            }
+        }
+        else
+        {
+            //Swing
+            if(this.Owner.Sprite.SpriteSource == this.PlayerSwing)
+            {
+                this.Owner.Sprite.SpriteSource = this.PlayerSuperSwing;
+            }
+            
+            //Jump Attack
+            else if(this.Owner.Sprite.SpriteSource == this.PlayerJumpAttack)
+            {
+                this.Owner.Sprite.SpriteSource = this.PlayerSuperJumpAttack;
+            }
+        }
+    }
+}

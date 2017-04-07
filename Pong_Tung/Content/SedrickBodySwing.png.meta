@@ -1,0 +1,20 @@
+ImageContent = 
+{
+	SpriteSourceBuilder = 
+	{
+		string Name = "SedrickBodySwing",
+		uint64 ResourceId = 54e3fac7b979ea37,
+		uint64 AtlasId = 5274cf95e4a661fd,
+		uint FrameSizeX = 120,
+		uint FrameSizeY = 120,
+		uint FrameCount = 5,
+		float FrameDelay = 0.125,
+		float OriginX = 60,
+		float OriginY = 60,
+		float PixelsPerUnit = 64,
+		bool Smoothing = false,
+		bool Looping = true,
+		Vec4 Slices = [0, 0, 0, 0],
+		SpriteFill Fill = Stretch,
+	},
+},

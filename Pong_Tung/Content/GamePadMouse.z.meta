@@ -1,0 +1,8 @@
+TextContent = 
+{
+	ZilchScriptBuilder = 
+	{
+		string Name = "GamePadMouse",
+		uint64 ResourceId = 54dbf6bbafaef6ff,
+	},
+},

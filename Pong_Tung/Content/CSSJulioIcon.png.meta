@@ -1,0 +1,20 @@
+ImageContent = 
+{
+	SpriteSourceBuilder = 
+	{
+		string Name = "CSSJulioIcon",
+		uint64 ResourceId = 542b531d62874298,
+		uint64 AtlasId = 5274cf95e4a661fd,
+		uint FrameSizeX = 16,
+		uint FrameSizeY = 19,
+		uint FrameCount = 1,
+		float FrameDelay = 0.0833333,
+		float OriginX = 8,
+		float OriginY = 9,
+		float PixelsPerUnit = 64,
+		bool Smoothing = false,
+		bool Looping = true,
+		Vec4 Slices = [0, 0, 0, 0],
+		SpriteFill Fill = Stretch,
+	},
+},
